@@ -1,12 +1,20 @@
 Package: conceptorCP
 Type: Package
-Title: What the package does (short line)
+Title: Change Point Detection with Conceptors
 Version: 1.0
 Date: 2022-07-07
 Author@R: 
   person("Noah", "Gade", , "ndg5e@virginia.edu", role = c("aut", "cre")
-Maintainer: Who to complain to <yourfault@somewhere.net>
-Description: More about what it does (maybe more than one line)
+Description: Tools to indentify a change point in time-ordered multivariate and dependent data. Estimates of significance are obtained with a moving block bootstrap. We assume an initial section of the data is at least wide-sense stationary, or it does not exhibit some long run trend.  
 License: MIT + file LICENSE
-Imports: Rcpp (>= 1.0.8.3)
+Imports: 
+    cowplot,
+    dplyr,
+    ggplot2,
+    Matrix,
+    Rcpp (>= 1.0.8.3),
+    RcppArmadillo,
+    stats,
+    tidyr
 LinkingTo: Rcpp, RcppArmadillo
+RoxygenNote: 7.1.2
