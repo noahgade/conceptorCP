@@ -44,9 +44,6 @@
 #' @importFrom dplyr %>%
 #'
 #' @examples
-#' test_data1 <- dplyr::tibble(x1 = rnorm(300), x2 = rnorm(300))
-#' test_data2 <- dplyr::tibble(x1 = rnorm(300, 0.7), x2 = rnorm(300, -0.7))
-#' test_data <- dplyr::bind_rows(test_data1, test_data2)
 #' ccp(test_data, trainL = 100, washoutL = 50)
 ccp <- function(data, trainL = 100, washoutL = "", tol = 0.04, nboots = 200) {
   L <- nrow(data)
@@ -97,9 +94,6 @@ ccp <- function(data, trainL = 100, washoutL = "", tol = 0.04, nboots = 200) {
 #' @importFrom scales label_number
 #'
 #' @examples
-#' test_data1 <- dplyr::tibble(x1 = rnorm(300), x2 = rnorm(300))
-#' test_data2 <- dplyr::tibble(x1 = rnorm(300, 0.7), x2 = rnorm(300, -0.7))
-#' test_data <- dplyr::bind_rows(test_data1, test_data2)
 #' output <- ccp(test_data)
 #' plotCP(output, nbreaks = 10)
 plotCP <- function(conceptorCPoutput, nbreaks = 10) {
