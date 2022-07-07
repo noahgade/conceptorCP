@@ -11,9 +11,11 @@ Imports:
     cowplot,
     dplyr,
     ggplot2,
+    grDevices,
     Matrix,
     Rcpp (>= 1.0.8.3),
     RcppArmadillo,
+    scales,
     stats,
     tidyr
 LinkingTo: Rcpp, RcppArmadillo

@@ -41,7 +41,7 @@
 #' }
 #' }
 #' @export
-#' @importFrom magrittr %>%
+#' @importFrom dplyr %>%
 #'
 #' @examples
 #' test_data1 <- dplyr::tibble(x1 = rnorm(300), x2 = rnorm(300))
@@ -92,7 +92,7 @@ ccp <- function(data, trainL = 100, washoutL = "", tol = 0.04, nboots = 200) {
 #' \item \emph{Bottom}: Comparison of cosine similarity empirical CDFs (each window against the full time series).
 #' }
 #' @export
-#' @importFrom magrittr %>%
+#' @importFrom dplyr %>%
 #' @importFrom grDevices rgb
 #' @importFrom scales label_number
 #'
