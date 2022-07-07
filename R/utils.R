@@ -6,7 +6,7 @@
 #' @param input_data A data set with columns as variables.
 #'
 #' @return The scaled data set with the same dimension as \code{input_data}.
-#' @importFrom dplyr %>%
+#' @importFrom magrittr %>%
 scalein <- function(input_data) {
   out <- tidyr::as_tibble(input_data, .name_repair = "unique") %>%
     dplyr::mutate(dplyr::across(dplyr::everything(), function(x) 2 * (x - stats::quantile(x, 0.025)) / (stats::quantile(x, 0.975) - stats::quantile(x, 0.025)) - 1))
