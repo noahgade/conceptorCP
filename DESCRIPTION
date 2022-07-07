@@ -1,0 +1,12 @@
+Package: conceptorCP
+Type: Package
+Title: What the package does (short line)
+Version: 1.0
+Date: 2022-07-07
+Author@R: 
+  person("Noah", "Gade", , "ndg5e@virginia.edu", role = c("aut", "cre")
+Maintainer: Who to complain to <yourfault@somewhere.net>
+Description: More about what it does (maybe more than one line)
+License: MIT + file LICENSE
+Imports: Rcpp (>= 1.0.8.3)
+LinkingTo: Rcpp, RcppArmadillo
