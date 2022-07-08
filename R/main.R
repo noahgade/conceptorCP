@@ -84,6 +84,7 @@ ccp <- function(data, trainL = 100, washoutL = "", tol = 0.04, nboots = 200) {
 #' ccp_output <- ccp(test_data)
 #' plotCP(ccp_output)
 plotCP <- function(ccp_output, nbreaks = 10) {
+  Time <- Window <- Values <- Reference <- WindowLength <- RCDF <- NULL
   Angles <- dplyr::tibble(Angles = ccp_output$angles)
   L <- nrow(Angles)
   Angles <- Angles %>% dplyr::mutate(Time = seq(1, L))
