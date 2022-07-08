@@ -189,11 +189,11 @@ plotCP <- function(conceptorCPoutput, nbreaks = 10) {
   plotS <- cowplot::axis_canvas(plotT, axis = "y", coord_flip = TRUE) +
     ggplot2::geom_histogram(ggplot2::aes(x = conceptorCPoutput$MBBnull), binwidth = 0.5, color = "black", fill = rgb(1, 0, 0, 0.2)) +
     ggplot2::coord_flip()
-
-  plot1 <- suppressWarnings(cowplot::insert_yaxis_grob(plotT, plotS, grid::unit(0.1, "null"), position = "right"))
+  suppressWarnings({
+  plot1 <- cowplot::insert_yaxis_grob(plotT, plotS, grid::unit(0.1, "null"), position = "right")
   plot2 <- cowplot::plot_grid(plotM + ggplot2::theme(legend.position = "none"), plotB, ncol = 1, align = "hv", axis = "lr", rel_heights = c(1.1, 1))
   plot3 <- cowplot::insert_yaxis_grob(plot2, grid::nullGrob(), grid::unit(0.1, "null"), position = "right")
   plot4 <- cowplot::plot_grid(plot1, plot3, ncol = 1)
-  plot5 <- cowplot::plot_grid(plot4, cowplot::get_legend(plotM), rel_heights = c(1, 0.15), ncol = 1, align = "hv", axis = "r")
+  plot5 <- cowplot::plot_grid(plot4, cowplot::get_legend(plotM), rel_heights = c(1, 0.15), ncol = 1, align = "hv", axis = "r")})
   return(plot5)
 }
