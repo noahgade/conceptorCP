@@ -4,12 +4,12 @@
 \alias{plotCP}
 \title{Viaualize conceptor CP method}
 \usage{
-plotCP(conceptorCPoutput, nbreaks = 10)
+plotCP(ccp_output, nbreaks = 10)
 }
 \arguments{
-\item{conceptorCPoutput}{Output from the conceptorCP function.}
-
 \item{nbreaks}{Number of windows to divide series for visual.}
+
+\item{conceptorCPoutput}{Output from the conceptorCP function.}
 }
 \value{
 Plots in the following order:
@@ -26,6 +26,6 @@ Plots estimate and internal dynamics of the conceptor change point method.
 Plots the time-ordered series of Kolmogorov-Smiornov like statistics from the conceptor change point method along with quantiles of the moving block bootstrap null distribution. Provides a visual aid of the relationship between the computed conceptor spaces and the propagating reservoir states over time with a cosine similarity measure. A comparison of the empirical disribution functions for windows of the cosine similarities are also included. Shading is relative and not on the same scale for all plots. Red shading represents time points where the dynamics are further away from the original conceptor space, and blue shading represents dynamics closer to the training window and the conceptor space.
 }
 \examples{
-output <- ccp(test_data)
-plotCP(output, nbreaks = 10)
+ccp_output <- ccp(test_data)
+plotCP(ccp_output)
 }
