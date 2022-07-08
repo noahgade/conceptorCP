@@ -161,7 +161,7 @@ plotCP <- function(conceptorCPoutput, nbreaks = 10) {
                    axis.ticks.x = ggplot2::element_blank())
 
   SSeries <- dplyr::tibble(Time = seq(conceptorCPoutput$netParams$washoutL + conceptorCPoutput$netParams$trainL + 1, L), Stat = conceptorCPoutput$statSeries)
-  upper.limit <- 1.02 * max(SSeries$Stat, stats::quantile(conceptorCPoutput$MBBnull, 0.90)[[1]], stats::quantile(conceptorCPoutput$MBBnull, 0.95)[[1]], stats::quantile(conceptorCPoutput$MBBnull, 0.99)[[1]])
+  upper.limit <- max(SSeries$Stat, stats::quantile(conceptorCPoutput$MBBnull, 0.99)[[1]]) + 0.25
 
   plotT <- ggplot2::ggplot(SSeries) +
     ggplot2::geom_line(ggplot2::aes(x = Time, y = Stat)) +
@@ -187,10 +187,10 @@ plotCP <- function(conceptorCPoutput, nbreaks = 10) {
                    panel.grid.minor = ggplot2::element_blank())
 
   plotS <- cowplot::axis_canvas(plotT, axis = "y", coord_flip = TRUE) +
-    ggplot2::geom_histogram(data = dplyr::tibble(MBBNull = conceptorCPoutput$MBBnull), ggplot2::aes(x = MBBNull), binwidth = 0.5, color = "black", fill = rgb(1, 0, 0, 0.2)) +
+    ggplot2::geom_histogram(ggplot2::aes(x = conceptorCPoutput$MBBnull), binwidth = 0.5, color = "black", fill = rgb(1, 0, 0, 0.2)) +
     ggplot2::coord_flip()
 
-  plot1 <- cowplot::insert_yaxis_grob(plotT, plotS, grid::unit(0.1, "null"), position = "right")
+  plot1 <- suppressWarnings(cowplot::insert_yaxis_grob(plotT, plotS, grid::unit(0.1, "null"), position = "right"))
   plot2 <- cowplot::plot_grid(plotM + ggplot2::theme(legend.position = "none"), plotB, ncol = 1, align = "hv", axis = "lr", rel_heights = c(1.1, 1))
   plot3 <- cowplot::insert_yaxis_grob(plot2, grid::nullGrob(), grid::unit(0.1, "null"), position = "right")
   plot4 <- cowplot::plot_grid(plot1, plot3, ncol = 1)
