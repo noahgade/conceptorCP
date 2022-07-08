@@ -18,9 +18,9 @@ Details of data creation:
 \itemize{
 \item Random seed set to 138 with \code{set.seed(138)}
 \item VAR1 coefficient matrix for time points 1 - 500, \cr
-\eqn{[0.6, -0.4, 0 // -0.2, 0.8, -0.3 // 0, 0.1, 0.3]}
+\eqn{[0.6, 0, 0 // -0.2, 0.8, 0 // 0, 0.1, 0.4]}
 \item VAR1 coefficient matrix for time points 501 - 1000, \cr
-\eqn{[0.2, -0.7, -0.2 // 0, 0.9, -0.1 // 0.2, 0.5, 0.1]}
+\eqn{[0, -0.8, -0 // 0.4, 0.2, 0 // 0.5, 0, -0.1]}
 \item Random innovations generated with \code{matrix(rnorm(3000), ncol = 3)}
 \item Each of the three variables initialized with \code{rnorm(1)}
 }
