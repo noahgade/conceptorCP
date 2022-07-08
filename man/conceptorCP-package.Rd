@@ -9,26 +9,15 @@
 \packageDescription{conceptorCP}
 }
 \details{
-
-The DESCRIPTION file:
-\packageDESCRIPTION{conceptorCP}
-\packageIndices{conceptorCP}
-~~ An overview of how to use the package, including the most important functions ~~
+Package tp estimate the most likely change point location in a multivariate time series. Fits a series of conceptor matrices to a representative training window of data, and compares the evolution of the RNN reservoir states to the original computed conceptor spaces. Method assumes that the training window is at least wide-sense cyclostationary, or there is not a long run trend present. The training window should be representative in the sense that it captures a full range of dynamics of the system. Change points are identified from a Kolmogorov-Smirnov like statistic based on a univariate sequence of derived cosine similarity measures. Significance estimates are obtained from a moving block bootstrap of the orginal data. Plotting functions included to help with the visualization of the data and the methodology.
 }
 \author{
-\packageAuthor{conceptorCP}
-
-Maintainer: \packageMaintainer{conceptorCP}
+person("Noah", "Gade", "D.", "ndg5e@virginia.edu", role = c("aut", "cre"))
 }
 \references{
-~~ Literature or other references for background information ~~
-}
-~~ Optionally other standard keywords, one per line, from file KEYWORDS in the R documentation directory ~~
-\keyword{ package }
-\seealso{
-~~ Optional links to other man pages, e.g. ~~
-~~ \code{\link[<pkg>:<pkg>-package]{<pkg>}} ~~
+Gade & Rodu.
 }
 \examples{
-~~ simple examples of the most important functions ~~
+ccp_output <- ccp(test_data)
+plotCP(ccp_output)
 }
