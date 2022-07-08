@@ -66,7 +66,7 @@ ccp <- function(data, trainL = 100, washoutL = "", tol = 0.04, nboots = 200) {
 #'
 #' @details Plots the time-ordered series of Kolmogorov-Smiornov like statistics from the conceptor change point method along with quantiles of the moving block bootstrap null distribution. Provides a visual aid of the relationship between the computed conceptor spaces and the propagating reservoir states over time with a cosine similarity measure. A comparison of the empirical disribution functions for windows of the cosine similarities are also included. Shading is relative and not on the same scale for all plots. Red shading represents time points where the dynamics are further away from the original conceptor space, and blue shading represents dynamics closer to the training window and the conceptor space.
 #'
-#' @param conceptorCPoutput Output from the conceptorCP function.
+#' @param ccp_output Output from the conceptorCP function.
 #' @param nbreaks Number of windows to divide series for visual.
 #'
 #' @return Plots in the following order:
@@ -187,7 +187,7 @@ plotCP <- function(ccp_output, nbreaks = 10) {
                    panel.grid.minor = ggplot2::element_blank())
 
   plotS <- cowplot::axis_canvas(plotT, axis = "y", coord_flip = TRUE) +
-    ggplot2::geom_histogram(ggplot2::aes(x = conceptorCPoutput$MBBnull), binwidth = 0.5, color = "black", fill = rgb(1, 0, 0, 0.2)) +
+    ggplot2::geom_histogram(ggplot2::aes(x = ccp_output$MBBnull), binwidth = 0.5, color = "black", fill = rgb(1, 0, 0, 0.2)) +
     ggplot2::coord_flip()
   suppressWarnings({
   plot1 <- cowplot::insert_yaxis_grob(plotT, plotS, grid::unit(0.1, "null"), position = "right")
