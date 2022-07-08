@@ -7,9 +7,9 @@
 plotCP(ccp_output, nbreaks = 10)
 }
 \arguments{
-\item{nbreaks}{Number of windows to divide series for visual.}
+\item{ccp_output}{Output from the conceptorCP function.}
 
-\item{conceptorCPoutput}{Output from the conceptorCP function.}
+\item{nbreaks}{Number of windows to divide series for visual.}
 }
 \value{
 Plots in the following order:
