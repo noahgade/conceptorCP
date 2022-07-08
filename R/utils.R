@@ -146,6 +146,13 @@ bootdata <- function(data, washoutL, trainL, blockL) {
   return(bootinput)
 }
 
+#' Adjust ggplot legend
+#'
+#' @param data Data series to plot.
+#' @param params Parameters of plot.
+#' @param size Size of key.
+#'
+#' @return Adjusted plot settings.
 draw_key_cust <- function(data, params, size) {
   if (data$colour == "blue") {
     ggplot2::draw_key_vpath(data, params, size)

@@ -30,9 +30,6 @@ Shading is relative and not on the same scale for all plots.
 Red shading represents time points where the dynamics are further away from the original conceptor space, and blue shading represents dynamics closer to the training window and the conceptor space.
 }
 \examples{
-test_data1 <- dplyr::tibble(x1 = rnorm(300), x2 = rnorm(300))
-test_data2 <- dplyr::tibble(x1 = rnorm(300, 0.7), x2 = rnorm(300, -0.7))
-test_data <- dplyr::bind_rows(test_data1, test_data2)
 output <- ccp(test_data)
 plotCP(output, nbreaks = 10)
 }

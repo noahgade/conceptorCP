@@ -54,8 +54,5 @@ Change points are identified from a Kolmogorov-Smirnov like statistic based on a
 Significance estimates are obtained from a moving block bootstrap of the orginal data.
 }
 \examples{
-test_data1 <- dplyr::tibble(x1 = rnorm(300), x2 = rnorm(300))
-test_data2 <- dplyr::tibble(x1 = rnorm(300, 0.7), x2 = rnorm(300, -0.7))
-test_data <- dplyr::bind_rows(test_data1, test_data2)
 ccp(test_data, trainL = 100, washoutL = 50)
 }
