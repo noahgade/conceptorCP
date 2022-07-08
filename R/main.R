@@ -1,15 +1,8 @@
 #' Change Point Detection with Conceptors
 #'
-#' @description
-#' Performs the conceptor change point algorithm to determine the location and significance of the most likely change point in a dependent, multivariate time series.
+#' @description Performs the conceptor change point algorithm to determine the location and significance of the most likely change point in a dependent, multivariate time series.
 #'
-#' @details
-#' Provides and estimate of the most likely change point location in a multivariate time series.
-#' Fits a series of conceptor matrices to a representative training window of data, and compares the evolution of the RNN reservoir states to the original computed conceptor spaces.
-#' Method assumes that the training window is at least wide-sense cyclostationary, or there is not a long run trend present.
-#' The training window should be representative in the sense that it captures a full range of dynamics of the system.
-#' Change points are identified from a Kolmogorov-Smirnov like statistic based on a univariate sequence of derived cosine similarity measures.
-#' Significance estimates are obtained from a moving block bootstrap of the orginal data.
+#' @details Provides and estimate of the most likely change point location in a multivariate time series. Fits a series of conceptor matrices to a representative training window of data, and compares the evolution of the RNN reservoir states to the original computed conceptor spaces. Method assumes that the training window is at least wide-sense cyclostationary, or there is not a long run trend present. The training window should be representative in the sense that it captures a full range of dynamics of the system. Change points are identified from a Kolmogorov-Smirnov like statistic based on a univariate sequence of derived cosine similarity measures. Significance estimates are obtained from a moving block bootstrap of the orginal data.
 #'
 #' @param data A T\code{x}d data set with variables as columns.
 #' @param trainL Number of time points used for conceptor training.
@@ -69,15 +62,9 @@ ccp <- function(data, trainL = 100, washoutL = "", tol = 0.04, nboots = 200) {
 }
 
 #' Viaualize conceptor CP method
-#' @description
-#' Plots estimate and internal dynamics of the conceptor change point method.
+#' @description Plots estimate and internal dynamics of the conceptor change point method.
 #'
-#' @details
-#' Plots the time-ordered series of Kolmogorov-Smiornov like statistics from the conceptor change point method along with quantiles of the moving block bootstrap null distribution.
-#' Provides a visual aid of the relationship between the computed conceptor spaces and the propagating reservoir states over time with a cosine similarity measure.
-#' A comparison of the empirical disribution functions for windows of the cosine similarities are also included.
-#' Shading is relative and not on the same scale for all plots.
-#' Red shading represents time points where the dynamics are further away from the original conceptor space, and blue shading represents dynamics closer to the training window and the conceptor space.
+#' @details Plots the time-ordered series of Kolmogorov-Smiornov like statistics from the conceptor change point method along with quantiles of the moving block bootstrap null distribution. Provides a visual aid of the relationship between the computed conceptor spaces and the propagating reservoir states over time with a cosine similarity measure. A comparison of the empirical disribution functions for windows of the cosine similarities are also included. Shading is relative and not on the same scale for all plots. Red shading represents time points where the dynamics are further away from the original conceptor space, and blue shading represents dynamics closer to the training window and the conceptor space.
 #'
 #' @param conceptorCPoutput Output from the conceptorCP function.
 #' @param nbreaks Number of windows to divide series for visual.

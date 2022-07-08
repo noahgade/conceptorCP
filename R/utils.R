@@ -1,7 +1,6 @@
 #' Scale columns of data to range (-1,1)
 #'
-#' @description
-#' Scales columns of data such that the middle 95% of the values are between -1 and 1 without changing the relative center.
+#' @description Scales columns of data such that the middle 95% of the values are between -1 and 1 without changing the relative center.
 #'
 #' @param input_data A data set with columns as variables.
 #'
@@ -14,8 +13,7 @@ scalein <- function(input_data) {
 }
 
 #' Randomly initialize RNN matrices
-#' @description
-#' Randomly initializes matrices Wbias, Winput, and Wres for use in a recurrent neural network. Wbias and Winput are dense matrices with random normal entries and Wres is a sparse matrix with a spectral radius of 0.8.
+#' @description Randomly initializes matrices Wbias, Winput, and Wres for use in a recurrent neural network. Wbias and Winput are dense matrices with random normal entries and Wres is a sparse matrix with a spectral radius of 0.8.
 #'
 #' @param N RNN reservoir size.
 #' @param dimen Dimension of original data, d.
@@ -36,8 +34,7 @@ initRNN <- function(N, dimen) {
 }
 
 #' Fit RNNs and conceptor matrices to data
-#' @description
-#' Fits 100 RNNs to the data and computes the corresponding conceptor matrices. RNN parameters, initialized matrices, reservoir states, conceptor matrices, and cosine similarity measures between the reservoir states and conceptor spaces are stored.
+#' @description Fits 100 RNNs to the data and computes the corresponding conceptor matrices. RNN parameters, initialized matrices, reservoir states, conceptor matrices, and cosine similarity measures between the reservoir states and conceptor spaces are stored.
 #'
 #' @param data A T\code{x}d data set with columns as variables.
 #' @param trainL Number of time points used for conceptor training.
@@ -128,8 +125,7 @@ fitCRNN <- function(data, trainL, washoutL = "", tol = 0.04) {
 }
 
 #' Generate bootstrapped data
-#' @description
-#' Creates bootstrapped data for MBB procedure of the same dimension as the original data. Randomly appends data sections of a specified block length after a washout and training period.
+#' @description Creates bootstrapped data for MBB procedure of the same dimension as the original data. Randomly appends data sections of a specified block length after a washout and training period.
 #'
 #' @param data A T\code{x}d data set with columns as variables.
 #' @param washoutL Number of time points used for reservoir washout.
