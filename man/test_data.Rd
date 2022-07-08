@@ -14,22 +14,15 @@ test_data
 3-Dimensional VAR1 data set with change point at T = 500
 }
 \details{
-\code{\verb{set.seed(138)
-CoeffMatrix1 <- matrix(c(0.6, -0.4, 0,
-   -0.2, 0.8, -0.3, 0, 0.1, 0.3), nrow = 3)
-CoeffMatrix2 <- matrix(c(0.2, -0.7, -0.2,
-    0, 0.9, -0.1, 0.2, 0.5, 0.1), nrow = 3)
-RandInnovs <- matrix(rnorm(3000), ncol = 3)
-test_data <- dplyr::tibble(Series1 = rnorm(1),
-    Series2 = rnorm(1), Series3 = rnorm(1))
-for(j in 1:500) {
-    test_data[j + 1,] <- as.matrix(test_data[j,])
-        * CoeffMatrix1 + RandInnovs[j,]
+Details of data creation:
+\itemize{
+\item Random seed set to 138 with \code{set.seed(138)}
+\item VAR1 coefficient matrix for time points 1 - 500, \cr
+\eqn{[0.6, -0.4, 0 // -0.2, 0.8, -0.3 // 0, 0.1, 0.3]}
+\item VAR1 coefficient matrix for time points 501 - 1000, \cr
+\eqn{[0.2, -0.7, -0.2 // 0, 0.9, -0.1 // 0.2, 0.5, 0.1]}
+\item Random innovations generated with \code{matrix(rnorm(3000), ncol = 3)}
+\item Each of the three variables initialized with \code{rnorm(1)}
 }
-for(j in 501:1000) {
-    test_data[j + 1,] <- as.matrix(test_data[j,])
-        * CoeffMatrix2 + RandInnovs[j,]
-}
-test_data <- test_data[-1,]}}
 }
 \keyword{datasets}
