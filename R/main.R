@@ -82,7 +82,7 @@ ccp <- function(data, trainL = 100, washoutL = "", tol = 0.04, nboots = 200) {
 #'
 #' @examples
 #' ccp_output <- ccp(test_data)
-#' plotCP(ccp_output, nbreaks = 10)
+#' plotCP(ccp_output)
 plotCP <- function(ccp_output, nbreaks = 10) {
   Angles <- dplyr::tibble(Angles = ccp_output$angles)
   L <- nrow(Angles)
