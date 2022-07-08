@@ -81,27 +81,27 @@ ccp <- function(data, trainL = 100, washoutL = "", tol = 0.04, nboots = 200) {
 #' @importFrom scales label_number
 #'
 #' @examples
-#' output <- ccp(test_data)
-#' plotCP(output, nbreaks = 10)
-plotCP <- function(conceptorCPoutput, nbreaks = 10) {
-  Angles <- dplyr::tibble(Angles = conceptorCPoutput$angles)
+#' ccp_output <- ccp(test_data)
+#' plotCP(ccp_output, nbreaks = 10)
+plotCP <- function(ccp_output, nbreaks = 10) {
+  Angles <- dplyr::tibble(Angles = ccp_output$angles)
   L <- nrow(Angles)
   Angles <- Angles %>% dplyr::mutate(Time = seq(1, L))
-  PWAngles <- Angles[(conceptorCPoutput$netParams$washoutL + conceptorCPoutput$netParams$trainL + 1):L,]
+  PWAngles <- Angles[(ccp_output$netParams$washoutL + ccp_output$netParams$trainL + 1):L,]
   AngleMin <- min(PWAngles) - (1 - min(PWAngles)) / 100
   PWAngles <- PWAngles %>% dplyr::mutate(PWRanks = rank(PWAngles$Angles) / nrow(PWAngles))
-  EndPts <- floor(seq(0, nrow(PWAngles), length.out = nbreaks + 1)) + conceptorCPoutput$netParams$washoutL + conceptorCPoutput$netParams$trainL
+  EndPts <- floor(seq(0, nrow(PWAngles), length.out = nbreaks + 1)) + ccp_output$netParams$washoutL + ccp_output$netParams$trainL
   PWAngles <- PWAngles %>% dplyr::rowwise() %>% dplyr::mutate(Window = sum(EndPts < Time))
   PWAngles$Values <- paste("Value", unlist(sapply(diff(EndPts), seq, simplify = F)))
 
-  plotM <- ggplot2::ggplot(PWAngles, ggplot2::aes(x = Time, y = Angles)) +
-    ggplot2::geom_segment(data = PWAngles, ggplot2::aes(x = Time, xend = Time, y = AngleMin, yend = 1, color = PWRanks)) +
+  plotM <- ggplot2::ggplot(PWAngles, ggplot2::aes_string(x = "Time", y = "Angles")) +
+    ggplot2::geom_segment(data = PWAngles, ggplot2::aes_string(x = "Time", xend = "Time", y = "AngleMin", yend = 1, color = "PWRanks")) +
     ggplot2::scale_color_gradientn(name = "",
                                    colors = c(rgb(1, 0, 0), rgb(1, 1, 1, 0), rgb(0, 0, 1)),
                                    limits = c(0, 1), na.value = "white",
                                    breaks = c(0, 0.5, 1),
                                    labels = c("Away from \nConceptor \nSpace", "\nMiddle: Percentiles of Cosine Similarities \n\nBottom: Relative ECDF Difference", "Towards \nConceptor \nSpace")) +
-    ggplot2::geom_point(ggplot2::aes(x = Time, y = Angles), shape = 20, size = 1) +
+    ggplot2::geom_point(ggplot2::aes_string(x = "Time", y = "Angles"), shape = 20, size = 1) +
     ggplot2::theme_bw() +
     ggplot2::scale_x_continuous(name = "Time",
                                 expand = c(0, 0),
@@ -132,13 +132,13 @@ plotCP <- function(conceptorCPoutput, nbreaks = 10) {
   CDF$WCDF <- dplyr::rowwise(WCDF) %>% dplyr::transmute(WCDF = sum(dplyr::c_across(cols = dplyr::everything())))
   CDF <- dplyr::mutate(CDF, WCDF = WCDF$WCDF / WindowLength, Shading = RCDF - WCDF)
 
-  plotB <- ggplot2::ggplot(data = CDF, ggplot2::aes(x = RCDF, y = WCDF)) +
-    ggplot2::geom_segment(ggplot2::aes(x = RCDF, xend = RCDF, y = 0, yend = 1, color = Shading)) +
+  plotB <- ggplot2::ggplot(data = CDF, ggplot2::aes_string(x = "RCDF", y = "WCDF")) +
+    ggplot2::geom_segment(ggplot2::aes_string(x = "RCDF", xend = "RCDF", y = 0, yend = 1, color = "Shading")) +
     ggplot2::scale_color_gradientn(name = "",
                                    colors = c(rgb(1, 0, 0), rgb(1, 1, 1, 0.5), rgb(0, 0, 1)),
                                    limits = c(-1, 1), na.value = "white") +
     ggplot2::facet_wrap(. ~ Window, nrow = 1) +
-    ggplot2::geom_point(data = CDF, ggplot2::aes(x = RCDF, y = WCDF), col = "black", shape = 20, size = 0.2) +
+    ggplot2::geom_point(data = CDF, ggplot2::aes_string(x = "RCDF", y = "WCDF"), col = "black", shape = 20, size = 0.2) +
     ggplot2::scale_x_continuous(name = "ECDF (Full Time Series)", limits = c(0, 1), expand = c(0, 0)) +
     ggplot2::scale_y_continuous(name = "ECDF (Time Window)", limits = c(0, 1), expand = c(0, 0)) +
     ggplot2::theme(strip.text.x = ggplot2::element_blank(),
@@ -160,18 +160,18 @@ plotCP <- function(conceptorCPoutput, nbreaks = 10) {
                    axis.ticks.y = ggplot2::element_blank(),
                    axis.ticks.x = ggplot2::element_blank())
 
-  SSeries <- dplyr::tibble(Time = seq(conceptorCPoutput$netParams$washoutL + conceptorCPoutput$netParams$trainL + 1, L), Stat = conceptorCPoutput$statSeries)
-  upper.limit <- max(SSeries$Stat, stats::quantile(conceptorCPoutput$MBBnull, 0.99)[[1]]) + 0.25
+  SSeries <- dplyr::tibble(Time = seq(ccp_output$netParams$washoutL + ccp_output$netParams$trainL + 1, L), Stat = ccp_output$statSeries)
+  upper.limit <- max(SSeries$Stat, stats::quantile(ccp_output$MBBnull, 0.99)[[1]]) + 0.25
 
   plotT <- ggplot2::ggplot(SSeries) +
-    ggplot2::geom_line(ggplot2::aes(x = Time, y = Stat)) +
-    ggplot2::geom_hline(ggplot2::aes(yintercept = stats::quantile(conceptorCPoutput$MBBnull, 0.90)[[1]], linetype = "Upper 10% \nMBB Null Dist."), color = "red", key_glyph = "cust") +
-    ggplot2::geom_hline(ggplot2::aes(yintercept = stats::quantile(conceptorCPoutput$MBBnull, 0.95)[[1]], linetype = "Upper 5% \nMBB Null Dist."), color = "red", key_glyph = "cust") +
-    ggplot2::geom_hline(ggplot2::aes(yintercept = stats::quantile(conceptorCPoutput$MBBnull, 0.99)[[1]], linetype = "Upper 1% \nMBB Null Dist."), color = "red", key_glyph = "cust") +
-    ggplot2::geom_vline(ggplot2::aes(xintercept = conceptorCPoutput$estimate, linetype = "Most Likely \nChange Point"), color = "blue", key_glyph = "cust") +
+    ggplot2::geom_line(ggplot2::aes_string(x = "Time", y = "Stat")) +
+    ggplot2::geom_hline(ggplot2::aes(yintercept = stats::quantile(ccp_output$MBBnull, 0.90)[[1]], linetype = "Upper 10% \nMBB Null Dist."), color = "red", key_glyph = "cust") +
+    ggplot2::geom_hline(ggplot2::aes(yintercept = stats::quantile(ccp_output$MBBnull, 0.95)[[1]], linetype = "Upper 5% \nMBB Null Dist."), color = "red", key_glyph = "cust") +
+    ggplot2::geom_hline(ggplot2::aes(yintercept = stats::quantile(ccp_output$MBBnull, 0.99)[[1]], linetype = "Upper 1% \nMBB Null Dist."), color = "red", key_glyph = "cust") +
+    ggplot2::geom_vline(ggplot2::aes(xintercept = ccp_output$estimate, linetype = "Most Likely \nChange Point"), color = "blue", key_glyph = "cust") +
     ggplot2::scale_linetype_manual("", values = c("Most Likely \nChange Point" = "solid", "Upper 10% \nMBB Null Dist." = "dotted", "Upper 5% \nMBB Null Dist." = "dashed", "Upper 1% \nMBB Null Dist." = "longdash"),
                                    guide = ggplot2::guide_legend(override.aes = list(colour = c("blue", "red", "red", "red")))) +
-    ggplot2::scale_x_continuous(name = "Time", limits = c(conceptorCPoutput$netParams$washoutL + conceptorCPoutput$netParams$trainL + 1, L),
+    ggplot2::scale_x_continuous(name = "Time", limits = c(ccp_output$netParams$washoutL + ccp_output$netParams$trainL + 1, L),
                                 expand = c(0, 0), EndPts + c(rep(1, nbreaks), 0)) +
     ggplot2::scale_y_continuous(name = "Statistic", limits = c(0, upper.limit), labels = label_number(accuracy = 0.1),
                                 expand = c(0, 0)) + ggplot2::theme_bw() +
