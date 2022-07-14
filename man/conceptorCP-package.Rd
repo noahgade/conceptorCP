@@ -14,9 +14,6 @@ Package to estimate the most likely change point location in a multivariate time
 \author{
 Noah D. Gade \href{ndg5e@virginia.edu}
 }
-\references{
-Gade & Rodu.
-}
 \examples{
 ccp_output <- ccp(test_data)
 plotCP(ccp_output)
