@@ -37,21 +37,27 @@ initRNN <- function(N, dimen) {
 #' @description Fits 100 RNNs to the data and computes the corresponding conceptor matrices. RNN parameters, initialized matrices, reservoir states, conceptor matrices, and cosine similarity measures between the reservoir states and conceptor spaces are stored.
 #'
 #' @param data A T\code{x}d data set with columns as variables.
+#' @param washL_plus_trainL Number of time points used for both reservoir washout and conceptor training.
 #' @param trainL Number of time points used for conceptor training.
 #' @param washoutL Number of time points used for reservoir washout.
 #' @param tol Error tolerance for conceptor fit to the data.
 #'
 #' @return List of RNN parameters and output from conceptor fit process.
-fitCRNN <- function(data, trainL, washoutL = "", tol = 0.04) {
+fitCRNN <- function(data, washL_plus_trainL, trainL, washoutL, tol) {
   L <- nrow(data)
   dimen <- ncol(data)
   input <- as.matrix(scalein(data))
 
-  if(washoutL == ""){
+  if(check_integer(washoutL) == FALSE) {
     TEMPwashoutL <- 50
   }else{
     TEMPwashoutL <- washoutL
   }
+
+  if(check_integer(trainL) == FALSE) {
+    trainL <- washL_plus_trainL - TEMPwashoutL
+  }
+
 
   N <- 10 * dimen
   regular <- 1e-4
@@ -73,9 +79,10 @@ fitCRNN <- function(data, trainL, washoutL = "", tol = 0.04) {
     W2 <- replicate(ninit, initRNN(N, dimen))
     rnn0 <- runRNN(input, W2, 0, bscale, iscale)
 
-    if(washoutL == "") {
+    if(check_integer(washoutL) == FALSE) {
       rnn1 <- runRNN(input, W2, 1, bscale, iscale)
       washoutL <- 10 * ceiling((min(which(apply(rnn1 - rnn0, 3, max) < 1e-6)) - 1) / 10)
+      trainL <- washL_plus_trainL - washoutL
     }
 
     C <- conceptorCalc(rnn0[,,(washoutL + 2):(washoutL + trainL + 1)], aperture)
@@ -155,4 +162,20 @@ draw_key_cust <- function(data, params, size) {
   } else {
     ggplot2::draw_key_path(data, params, size)
   }
+}
+
+#' Check if value is a positive integer
+#'
+#' @param value Numeric value to check if positive integer.
+#'
+#' @return Boolean value (T/F) if value is a positive integer.
+check_integer <- function(value) {
+  if(is.numeric(value) == FALSE) {
+    output <- FALSE
+  } else if(value <= 0) {
+    output <- FALSE
+  } else {
+    output <- (abs(value - round(value)) < .Machine$double.eps^0.5)
+  }
+  return(output)
 }

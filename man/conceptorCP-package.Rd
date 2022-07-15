@@ -16,6 +16,8 @@ Noah D. Gade\cr
 \email{ndg5e@virginia.edu}
 }
 \examples{
+\dontrun{
 ccp_output <- ccp(test_data)
 plotCP(ccp_output)
+}
 }

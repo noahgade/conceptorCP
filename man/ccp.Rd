@@ -4,10 +4,19 @@
 \alias{ccp}
 \title{Change Point Detection with Conceptors}
 \usage{
-ccp(data, trainL = 100, washoutL = "", tol = 0.04, nboots = 200)
+ccp(
+  data,
+  washL_plus_trainL = "",
+  trainL = "",
+  washoutL = "",
+  tol = 0.04,
+  nboots = 200
+)
 }
 \arguments{
 \item{data}{A T\code{x}d data set with variables as columns.}
+
+\item{washL_plus_trainL}{Number of time points used for both reservoir washout and conceptor training.}
 
 \item{trainL}{Number of time points used for conceptor training.}
 
@@ -43,11 +52,13 @@ List of output:
 }
 }
 \description{
-Performs the conceptor change point algorithm to determine the location and significance of the most likely change point in a dependent, multivariate time series.
+Performs the conceptor change point algorithm to determine the location and significance of the most likely change point in a dependent, multivariate time series. Requires specification of a training length, or a combined washout and training length.
 }
 \details{
 Provides an estimate of the most likely change point location in a multivariate time series. Fits a series of conceptor matrices to a representative training window of data, and compares the evolution of the RNN reservoir states to the original computed conceptor spaces. Method assumes that the training window is at least wide-sense cyclostationary, or there is not a long run trend present. The training window should be representative in the sense that it captures a full range of dynamics of the system. Change points are identified from a Kolmogorov-Smirnov like statistic based on a univariate sequence of derived cosine similarity measures. Significance estimates are obtained from a moving block bootstrap of the orginal data.
 }
 \examples{
-ccp(test_data, trainL = 100, washoutL = 50)
+\dontrun{
+ccp(test_data, washL_plus_trainL = 150)
+}
 }

@@ -1,10 +1,11 @@
 #' Change Point Detection with Conceptors
 #'
-#' @description Performs the conceptor change point algorithm to determine the location and significance of the most likely change point in a dependent, multivariate time series.
+#' @description Performs the conceptor change point algorithm to determine the location and significance of the most likely change point in a dependent, multivariate time series. Requires specification of a training length, or a combined washout and training length.
 #'
 #' @details Provides an estimate of the most likely change point location in a multivariate time series. Fits a series of conceptor matrices to a representative training window of data, and compares the evolution of the RNN reservoir states to the original computed conceptor spaces. Method assumes that the training window is at least wide-sense cyclostationary, or there is not a long run trend present. The training window should be representative in the sense that it captures a full range of dynamics of the system. Change points are identified from a Kolmogorov-Smirnov like statistic based on a univariate sequence of derived cosine similarity measures. Significance estimates are obtained from a moving block bootstrap of the orginal data.
 #'
 #' @param data A T\code{x}d data set with variables as columns.
+#' @param washL_plus_trainL Number of time points used for both reservoir washout and conceptor training.
 #' @param trainL Number of time points used for conceptor training.
 #' @param washoutL Number of time points used for reservoir washout.
 #' @param tol Error tolerance for conceptor fit to the data.
@@ -37,10 +38,31 @@
 #' @importFrom dplyr %>%
 #'
 #' @examples
-#' ccp(test_data, trainL = 100, washoutL = 50)
-ccp <- function(data, trainL = 100, washoutL = "", tol = 0.04, nboots = 200) {
+#' \dontrun{
+#' ccp(test_data, washL_plus_trainL = 150)
+#' }
+ccp <- function(data, washL_plus_trainL = "", trainL = "", washoutL = "", tol = 0.04, nboots = 200) {
+
+  if(check_integer(washL_plus_trainL) == FALSE & check_integer(trainL) == FALSE) {
+    print("Error: Please specify a number of time points for conceptor training.")
+    print("Specify one of the following parameters: washL_plus_trainL, trainL")
+    break
+  } else if(check_integer(washL_plus_trainL) == TRUE & check_integer(washoutL) == TRUE & check_integer(trainL) == FALSE) {
+    trainL <- washL_plus_trainL - washoutL
+  } else if(check_integer(washL_plus_trainL) == FALSE & check_integer(washoutL) == TRUE & check_integer(trainL) == TRUE) {
+    washL_plus_trainL <- washoutL + trainL
+  } else if(check_integer(washL_plus_trainL) == TRUE & check_integer(washoutL) == FALSE & check_integer(trainL) == TRUE) {
+    washoutL <- washL_plus_trainL - trainL
+  } else if(check_integer(washL_plus_trainL) == TRUE & check_integer(washoutL) == TRUE & check_integer(trainL) == TRUE) {
+    if(washL_plus_trainL != (washoutL + trainL)) {
+      print("Error: Please check specifications of washout and training lengths.")
+      print("Specify parameters such that washL_plus_trainL = washoutL + trainL")
+      break
+    }
+  }
+
   L <- nrow(data)
-  CRNNFit <- fitCRNN(data, trainL, washoutL, tol)
+  CRNNFit <- fitCRNN(data, washL_plus_trainL, trainL, washoutL, tol)
   KSseries <- KSstatCalc(CRNNFit$output$angles[(CRNNFit$params$washoutL + CRNNFit$params$trainL + 1):L])
   statistic <- max(KSseries)
   estimate <- which.max(KSseries) + CRNNFit$params$washoutL + CRNNFit$params$trainL
@@ -81,8 +103,10 @@ ccp <- function(data, trainL = 100, washoutL = "", tol = 0.04, nboots = 200) {
 #' @importFrom scales label_number
 #'
 #' @examples
+#' \dontrun{
 #' ccp_output <- ccp(test_data)
 #' plotCP(ccp_output)
+#' }
 plotCP <- function(ccp_output, nbreaks = 10) {
   Time <- Window <- Values <- Reference <- WindowLength <- RCDF <- NULL
   Angles <- dplyr::tibble(Angles = ccp_output$angles)
