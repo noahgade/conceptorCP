@@ -4,7 +4,7 @@ Title: Change Point Detection with Conceptors
 Version: 1.1
 Date: 2022-07-07
 Authors@R: person(given = "Noah D", family = "Gade", email = "ndg5e@virginia.edu", role = c("aut", "cre"))
-Description: Tools to indentify a change point in time-ordered multivariate and dependent data. Estimates of significance are obtained with a moving block bootstrap. We assume an initial section of the data is at least wide-sense stationary, or it does not exhibit some long run trend.  
+Description: Tools to identify a change point in time-ordered multivariate and dependent data. Estimates of significance are obtained with a moving block bootstrap. We assume an initial section of the data is at least wide-sense stationary, or it does not exhibit some long run trend.  
 License: MIT + file LICENSE
 Encoding: UTF-8
 Imports: 
