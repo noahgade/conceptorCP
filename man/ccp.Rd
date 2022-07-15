@@ -60,5 +60,7 @@ Provides an estimate of the most likely change point location in a multivariate 
 \examples{
 \dontrun{
 ccp(test_data, washL_plus_trainL = 150)
+ccp(test_data, trainL = 100)
+ccp(test_data, trainL = 100, tol = 0.08, nboots = 500)
 }
 }
