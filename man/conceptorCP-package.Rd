@@ -17,7 +17,7 @@ Noah D. Gade\cr
 }
 \examples{
 \dontrun{
-ccp_output <- ccp(test_data)
+ccp_output <- ccp(test_data, washL_plus_trainL = 150)
 plotCP(ccp_output)
 }
 }

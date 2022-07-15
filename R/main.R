@@ -40,13 +40,13 @@
 #' @examples
 #' \dontrun{
 #' ccp(test_data, washL_plus_trainL = 150)
+#' ccp(test_data, trainL = 100)
+#' ccp(test_data, trainL = 100, tol = 0.08, nboots = 500)
 #' }
 ccp <- function(data, washL_plus_trainL = "", trainL = "", washoutL = "", tol = 0.04, nboots = 200) {
 
   if(check_integer(washL_plus_trainL) == FALSE & check_integer(trainL) == FALSE) {
-    print("Error: Please specify a number of time points for conceptor training.")
-    print("Specify one of the following parameters: washL_plus_trainL, trainL")
-    break
+    stop(cat("Error: Please specify a number of time points for conceptor training.\nSpecify one of the following parameters: washL_plus_trainL, trainL"))
   } else if(check_integer(washL_plus_trainL) == TRUE & check_integer(washoutL) == TRUE & check_integer(trainL) == FALSE) {
     trainL <- washL_plus_trainL - washoutL
   } else if(check_integer(washL_plus_trainL) == FALSE & check_integer(washoutL) == TRUE & check_integer(trainL) == TRUE) {
@@ -55,9 +55,7 @@ ccp <- function(data, washL_plus_trainL = "", trainL = "", washoutL = "", tol = 
     washoutL <- washL_plus_trainL - trainL
   } else if(check_integer(washL_plus_trainL) == TRUE & check_integer(washoutL) == TRUE & check_integer(trainL) == TRUE) {
     if(washL_plus_trainL != (washoutL + trainL)) {
-      print("Error: Please check specifications of washout and training lengths.")
-      print("Specify parameters such that washL_plus_trainL = washoutL + trainL")
-      break
+      stop(cat("Error: Please check specifications of washout and training lengths.\nSpecify parameters such that washL_plus_trainL = washoutL + trainL"))
     }
   }
 
@@ -104,7 +102,7 @@ ccp <- function(data, washL_plus_trainL = "", trainL = "", washoutL = "", tol = 
 #'
 #' @examples
 #' \dontrun{
-#' ccp_output <- ccp(test_data)
+#' ccp_output <- ccp(test_data, washL_plus_trainL = 150)
 #' plotCP(ccp_output)
 #' }
 plotCP <- function(ccp_output, nbreaks = 10) {
