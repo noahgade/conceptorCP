@@ -23,8 +23,9 @@ scalein <- function(input_data) {
 initRNN <- function(N, dimen) {
   rscale <- 0.8
   W <- matrix(stats::rnorm(N*dimen + N), nrow = N)
+  nconnect <- ifelse(N*N < 10*N, N*N, 10*N)
   repeat{
-    Wres_sparse <- Matrix::rsparsematrix(N, N, nnz = 10*N, rand.x = function(x) stats::rnorm(x))
+    Wres_sparse <- Matrix::rsparsematrix(N, N, nnz = nconnect*N, rand.x = function(x) stats::rnorm(x))
     maxeigval <- max(abs(eigen(Wres_sparse, only.values = T)$values))
     Wres <- rscale / maxeigval * Wres_sparse
     if(sum(is.infinite(Wres)) == 0){break}
