@@ -27,8 +27,12 @@ testthat::test_that("ccp Function", {
     ccp(test_data, trainL = 100, plot.it = 0)
   )
 
+  testthat::expect_silent(
+  output <- ccp(test_data, trainL = 100, plot.it = FALSE)
+  )
+
   testthat::expect_type(
-    ccp(test_data, trainL = 100, plot.it = FALSE),
+    output,
     "list"
   )
 
@@ -36,8 +40,9 @@ testthat::test_that("ccp Function", {
     ccp(test_data, washoutL_plus_trainL = 150, plot.it = FALSE)
   )
 
-  testthat::expect_output(
-    ccp(test_data, trainL = 100)
+  testthat::expect_type(
+    plotCP(output),
+    c("gg", "ggplot")
   )
 }
 )
