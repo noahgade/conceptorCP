@@ -46,7 +46,7 @@
 ccp <- function(data, washL_plus_trainL = "", trainL = "", washoutL = "", tol = 0.04, nboots = 200, plot.it = TRUE) {
 
   if(check_integer(washL_plus_trainL) == FALSE & check_integer(trainL) == FALSE) {
-    stop(cat("Error: Please specify a number of time points for conceptor training.\nSpecify one of the following parameters: washL_plus_trainL, trainL"))
+    stop("Error: Please specify a number of time points for conceptor training. Specify one of the following parameters: washL_plus_trainL, trainL")
   } else if(check_integer(washL_plus_trainL) == TRUE & check_integer(washoutL) == TRUE & check_integer(trainL) == FALSE) {
     trainL <- washL_plus_trainL - washoutL
   } else if(check_integer(washL_plus_trainL) == FALSE & check_integer(washoutL) == TRUE & check_integer(trainL) == TRUE) {
