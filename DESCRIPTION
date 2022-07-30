@@ -17,6 +17,7 @@ Imports:
     RcppArmadillo,
     scales,
     stats,
+    testthat,
     tidyr,
     usethis
 LinkingTo: Rcpp, RcppArmadillo
@@ -24,6 +25,4 @@ RoxygenNote: 7.2.1
 Depends: 
     R (>= 2.10)
 LazyData: true
-Suggests: 
-    testthat (>= 3.0.0)
 Config/testthat/edition: 3
