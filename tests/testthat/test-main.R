@@ -41,9 +41,8 @@ testthat::test_that("ccp Function", {
   )
 
   p <- plotCP(output)
-  testthat::expect_type(
-    p,
-    "ggplot"
+  testthat::expect_true(
+    ggplot2:is.ggplot(p)
   )
 
   testthat::expect_error(
@@ -56,6 +55,10 @@ testthat::test_that("ccp Function", {
 
   testthat::expect_warning(
     plotCP(output, nbreaks = 50)
+  )
+
+  testthat::expect_true(
+    output$netParams$error < 0.04
   )
 }
 )
