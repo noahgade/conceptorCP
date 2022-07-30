@@ -144,7 +144,7 @@ fitCRNN <- function(data, washL_plus_trainL, trainL, washoutL, tol) {
 bootdata <- function(data, washoutL, trainL, blockL) {
   L <- nrow(data)
   input <- as.matrix(scalein(data))
-  wrapinput <- rbind(input, input[(washoutL + trainL + 1):L,])
+  wrapinput <- rbind(input, as.matrix(input[(washoutL + trainL + 1):L,]))
   sindex <- sample((washoutL + trainL + 1):L, ceiling((L - washoutL - trainL) / blockL))
   bootinput <- as.matrix(rbind(as.matrix(input[1:(washoutL + trainL),]), do.call(rbind, lapply(sindex, function(x, dat, blockL) as.matrix(dat[x:(x + blockL - 1),]), wrapinput, blockL)))[1:L,])
   return(bootinput)
