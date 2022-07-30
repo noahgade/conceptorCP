@@ -42,7 +42,7 @@ testthat::test_that("ccp Function", {
 
   p <- plotCP(output)
   testthat::expect_true(
-    ggplot2:is.ggplot(p)
+    ggplot2::is.ggplot(p)
   )
 
   testthat::expect_error(
