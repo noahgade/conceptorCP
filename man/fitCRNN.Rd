@@ -4,12 +4,12 @@
 \alias{fitCRNN}
 \title{Fit RNNs and conceptor matrices to data}
 \usage{
-fitCRNN(data, washL_plus_trainL, trainL, washoutL, tol)
+fitCRNN(data, washoutL_plus_trainL, trainL, washoutL, tol)
 }
 \arguments{
 \item{data}{A T\code{x}d data set with columns as variables.}
 
-\item{washL_plus_trainL}{Number of time points used for both reservoir washout and conceptor training.}
+\item{washoutL_plus_trainL}{Number of time points used for both reservoir washout and conceptor training.}
 
 \item{trainL}{Number of time points used for conceptor training.}
 

@@ -6,7 +6,7 @@
 \usage{
 ccp(
   data,
-  washL_plus_trainL = "",
+  washoutL_plus_trainL = "",
   trainL = "",
   washoutL = "",
   tol = 0.04,
@@ -17,7 +17,7 @@ ccp(
 \arguments{
 \item{data}{A T\code{x}d data set with variables as columns.}
 
-\item{washL_plus_trainL}{Number of time points used for both reservoir washout and conceptor training.}
+\item{washoutL_plus_trainL}{Number of time points used for both reservoir washout and conceptor training.}
 
 \item{trainL}{Number of time points used for conceptor training.}
 
@@ -60,7 +60,7 @@ Provides an estimate of the most likely change point location in a multivariate 
 }
 \examples{
 \donttest{
-ccp(test_data, washL_plus_trainL = 150)
+ccp(test_data, washoutL_plus_trainL = 150)
 ccp(test_data, trainL = 100)
 ccp(test_data, trainL = 100, tol = 0.08, nboots = 500)
 }

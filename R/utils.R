@@ -38,27 +38,29 @@ initRNN <- function(N, dimen) {
 #' @description Fits 100 RNNs to the data and computes the corresponding conceptor matrices. RNN parameters, initialized matrices, reservoir states, conceptor matrices, and cosine similarity measures between the reservoir states and conceptor spaces are stored.
 #'
 #' @param data A T\code{x}d data set with columns as variables.
-#' @param washL_plus_trainL Number of time points used for both reservoir washout and conceptor training.
+#' @param washoutL_plus_trainL Number of time points used for both reservoir washout and conceptor training.
 #' @param trainL Number of time points used for conceptor training.
 #' @param washoutL Number of time points used for reservoir washout.
 #' @param tol Error tolerance for conceptor fit to the data.
 #'
 #' @return List of RNN parameters and output from conceptor fit process.
-fitCRNN <- function(data, washL_plus_trainL, trainL, washoutL, tol) {
+fitCRNN <- function(data, washoutL_plus_trainL, trainL, washoutL, tol) {
   L <- nrow(data)
   dimen <- ncol(data)
   input <- as.matrix(scalein(data))
 
   if(check_integer(washoutL) == FALSE) {
     TEMPwashoutL <- 50
+    if(check_integer(trainL) == FALSE) {
+      trainL <- washoutL_plus_trainL - TEMPwashoutL
+      scenario <- 1
+    } else {
+      washoutL_plus_trainL <- trainL + TEMPwashoutL
+      scenario <- 2
+    }
   }else{
     TEMPwashoutL <- washoutL
   }
-
-  if(check_integer(trainL) == FALSE) {
-    trainL <- washL_plus_trainL - TEMPwashoutL
-  }
-
 
   N <- 10 * dimen
   regular <- 1e-4
@@ -83,7 +85,12 @@ fitCRNN <- function(data, washL_plus_trainL, trainL, washoutL, tol) {
     if(check_integer(washoutL) == FALSE) {
       rnn1 <- runRNN(input, W2, 1, bscale, iscale)
       washoutL <- 10 * ceiling((min(which(apply(rnn1 - rnn0, 3, max) < 1e-6)) - 1) / 10)
-      trainL <- washL_plus_trainL - washoutL
+
+      if(scenario == 1) {
+        trainL <- washoutL_plus_trainL - washoutL
+      } else if (scenario == 2) {
+        washoutL_plus_trainL <- trainL + washoutL
+      }
     }
 
     C <- conceptorCalc(rnn0[,,(washoutL + 2):(washoutL + trainL + 1)], aperture)
@@ -202,7 +209,7 @@ check_integer <- function(value) {
 #'
 #' @examples
 #' \donttest{}
-#' ccp_output <- ccp(test_data, washL_plus_trainL = 150)
+#' ccp_output <- ccp(test_data, washoutL_plus_trainL = 150)
 #' plotCP(ccp_output)
 #' }
 plotCP <- function(ccp_output, nbreaks = 10) {
