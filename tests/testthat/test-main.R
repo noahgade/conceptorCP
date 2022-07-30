@@ -20,11 +20,15 @@ testthat::test_that("InputErrors", {
   )
 
   testthat::expect_warning(
-    ccp(test_data, trainL = 100, nboots = 5)
+    ccp(test_data, trainL = 100, nboots = 5, plot.it = FALSE)
   )
 
   testthat::expect_error(
     ccp(test_data, trainL = 100, plot.it = 0)
+  )
+
+  testthat::expect_output(
+    ccp(test_data, trainL = 100, plot.it = FALSE)
   )
 }
 )
