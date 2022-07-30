@@ -60,6 +60,26 @@ ccp <- function(data, washoutL_plus_trainL = "", trainL = "", washoutL = "", tol
     }
   }
 
+  if(length(dim(data)) != 2) {
+    stop("Please enter data in format Txd with columns as variables.")
+  }
+
+  if(tol < 1e-3 | tol > 0.50) {
+    stop("Please specify a relevant error tolerance.")
+  }
+
+  if(nboots <= 0) {
+    stop("Please specify a positive number of bootstrap iterations.")
+  } else if(nboots <= 100) {
+    warning("Consider increasing the number of bootstrap iterations.")
+  } else if(nboots > 1000) {
+    warning("Computation time may be hindered by a large number of bootstrap iterations.")
+  }
+
+  if(is.logical(plot.it) == FALSE) {
+    stop("Please specify plot.it to include or suppress plot output.")
+  }
+
   L <- nrow(data)
   CRNNFit <- fitCRNN(data, washoutL_plus_trainL, trainL, washoutL, tol)
   KSseries <- KSstatCalc(CRNNFit$output$angles[(CRNNFit$params$washoutL + CRNNFit$params$trainL + 1):L])

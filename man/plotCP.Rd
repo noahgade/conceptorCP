@@ -2,7 +2,7 @@
 % Please edit documentation in R/utils.R
 \name{plotCP}
 \alias{plotCP}
-\title{Viaualize conceptor CP method}
+\title{Vizualize conceptor CP method}
 \usage{
 plotCP(ccp_output, nbreaks = 10)
 }
