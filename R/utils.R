@@ -208,7 +208,7 @@ check_integer <- function(value) {
 #' @importFrom scales label_number
 #'
 #' @examples
-#' \donttest{}
+#' \donttest{
 #' ccp_output <- ccp(test_data, washoutL_plus_trainL = 150)
 #' plotCP(ccp_output)
 #' }
