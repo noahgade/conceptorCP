@@ -213,6 +213,14 @@ check_integer <- function(value) {
 #' plotCP(ccp_output)
 #' }
 plotCP <- function(ccp_output, nbreaks = 10) {
+  if(check_integer(nbreaks) == FALSE) {
+    stop("Enter an integer number of break points for plot.")
+  }
+
+  if(nbreaks < 2 | nbreaks > 40) {
+    warning("Plot may be improved by adjusting number of break points.")
+  }
+
   Time <- Window <- Values <- Reference <- WindowLength <- RCDF <- NULL
   Angles <- dplyr::tibble(Angles = ccp_output$angles)
   L <- nrow(Angles)

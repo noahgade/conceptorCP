@@ -40,9 +40,22 @@ testthat::test_that("ccp Function", {
     ccp(test_data, washoutL_plus_trainL = 150, plot.it = FALSE)
   )
 
+  p <- plotCP(output)
   testthat::expect_type(
-    plotCP(output),
-    c("gg", "ggplot")
+    p,
+    "ggplot"
+  )
+
+  testthat::expect_error(
+    plotCP(1:1000)
+  )
+
+  testthat::expect_error(
+    plotCP(output, nbreaks = 0)
+  )
+
+  testthat::expect_warning(
+    plotCP(output, nbreaks = 50)
   )
 }
 )
