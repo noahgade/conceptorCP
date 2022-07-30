@@ -60,7 +60,7 @@ ccp <- function(data, washL_plus_trainL = "", trainL = "", washoutL = "", tol = 
   }
 
   L <- nrow(data)
-  CRNNFit <- fitCRNN(data, washL_plus_trainL, trainL, washoutL, tol)
+  CRNNFit <- fitCRNN(as.matrix(data), washL_plus_trainL, trainL, washoutL, tol)
   KSseries <- KSstatCalc(CRNNFit$output$angles[(CRNNFit$params$washoutL + CRNNFit$params$trainL + 1):L])
   statistic <- max(KSseries)
   estimate <- which.max(KSseries) + CRNNFit$params$washoutL + CRNNFit$params$trainL
