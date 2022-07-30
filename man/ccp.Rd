@@ -10,7 +10,8 @@ ccp(
   trainL = "",
   washoutL = "",
   tol = 0.04,
-  nboots = 200
+  nboots = 200,
+  plot.it = TRUE
 )
 }
 \arguments{
@@ -58,7 +59,7 @@ Performs the conceptor change point algorithm to determine the location and sign
 Provides an estimate of the most likely change point location in a multivariate time series. Fits a series of conceptor matrices to a representative training window of data, and compares the evolution of the RNN reservoir states to the original computed conceptor spaces. Method assumes that the training window is at least wide-sense cyclostationary, or there is not a long run trend present. The training window should be representative in the sense that it captures a full range of dynamics of the system. Change points are identified from a Kolmogorov-Smirnov like statistic based on a univariate sequence of derived cosine similarity measures. Significance estimates are obtained from a moving block bootstrap of the orginal data.
 }
 \examples{
-\dontrun{
+\donttest{
 ccp(test_data, washL_plus_trainL = 150)
 ccp(test_data, trainL = 100)
 ccp(test_data, trainL = 100, tol = 0.08, nboots = 500)
