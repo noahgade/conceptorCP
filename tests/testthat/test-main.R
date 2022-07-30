@@ -1,9 +1,7 @@
-context("ccp")
-
 testthat::test_that("InputErrors", {
   testthat::expect_error(
     ccp(test_data),
-    "Please specify a number of time points for conceptor training. Specify one of the following parameters: washoutL_plus_trainL, trainL"
+    "Error in `ccp(test_data)`: Please specify a number of time points for conceptor training. Specify one of the following parameters: washoutL_plus_trainL, trainL"
   )
 
   testthat::expect_error(
