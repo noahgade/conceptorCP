@@ -87,7 +87,7 @@ fitCRNN <- function(data, washL_plus_trainL, trainL, washoutL, tol) {
     }
 
     C <- conceptorCalc(rnn0[,,(washoutL + 2):(washoutL + trainL + 1)], aperture)
-    Wout <- WoutCalc(input[(washoutL + 1):(washoutL + trainL),], rnn0[,,(washoutL + 2):(washoutL + trainL + 1)], regular)
+    Wout <- WoutCalc(as.matrix(input[(washoutL + 1):(washoutL + trainL),]), rnn0[,,(washoutL + 2):(washoutL + trainL + 1)], regular)
     crnn0 <- runCRNN(input, W2, C, 0, washoutL, bscale, iscale)
     output <- outputCalc(Wout, crnn0[,,(L + 1 + washoutL + 2):(L + 1 + washoutL + trainL + 1)])
     error <- mean(apply(output, 3, NRMSE, input[(washoutL + 1):(washoutL + trainL),]))
