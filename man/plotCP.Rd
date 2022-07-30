@@ -25,3 +25,9 @@ Plots estimate and internal dynamics of the conceptor change point method.
 \details{
 Plots the time-ordered series of Kolmogorov-Smiornov like statistics from the conceptor change point method along with quantiles of the moving block bootstrap null distribution. Provides a visual aid of the relationship between the computed conceptor spaces and the propagating reservoir states over time with a cosine similarity measure. A comparison of the empirical disribution functions for windows of the cosine similarities are also included. Shading is relative and not on the same scale for all plots. Red shading represents time points where the dynamics are further away from the original conceptor space, and blue shading represents dynamics closer to the training window and the conceptor space.
 }
+\examples{
+\donttest{
+ccp_output <- ccp(test_data, washoutL_plus_trainL = 150)
+plotCP(ccp_output)
+}
+}
