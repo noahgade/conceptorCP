@@ -23,7 +23,7 @@ testthat::test_that("InputErrors", {
     ccp(test_data, trainL = 100, nboots = 5)
   )
 
-  test_that::expect_error(
+  testthat::expect_error(
     ccp(test_data, trainL = 100, plot.it = 0)
   )
 }
