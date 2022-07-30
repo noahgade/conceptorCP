@@ -1,4 +1,4 @@
-testthat::test_that("InputErrors", {
+testthat::test_that("ccp Function", {
   testthat::expect_error(
     ccp(test_data)
   )
@@ -27,8 +27,17 @@ testthat::test_that("InputErrors", {
     ccp(test_data, trainL = 100, plot.it = 0)
   )
 
+  testthat::expect_type(
+    ccp(test_data, trainL = 100, plot.it = FALSE),
+    "list"
+  )
+
+  testthat::expect_silent(
+    ccp(test_data, washoutL_plus_trainL = 150, plot.it = FALSE)
+  )
+
   testthat::expect_output(
-    ccp(test_data, trainL = 100, plot.it = FALSE)
+    ccp(test_data, trainL = 100)
   )
 }
 )
