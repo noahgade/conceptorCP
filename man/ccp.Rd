@@ -26,6 +26,8 @@ ccp(
 \item{tol}{Error tolerance for conceptor fit to the data.}
 
 \item{nboots}{Number of bootstraps to estimate statistic null distribution.}
+
+\item{plot.it}{Indicator to toggle export of plot.}
 }
 \value{
 List of output:

@@ -10,6 +10,7 @@
 #' @param washoutL Number of time points used for reservoir washout.
 #' @param tol Error tolerance for conceptor fit to the data.
 #' @param nboots Number of bootstraps to estimate statistic null distribution.
+#' @param plot.it Indicator to toggle export of plot.
 #'
 #' @return List of output:
 #' \describe{
