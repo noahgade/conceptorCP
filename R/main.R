@@ -16,7 +16,7 @@
 #' \describe{
 #' \item{\code{estimate}}{Estimated change point location.}
 #' \item{\code{statistic}}{Statistic from method.}
-#' \item{\code{MBBsig}}{Significance estimate from MBB.}
+#' \item{\code{MBBquant}}{Estimated quantile of statistic from MBB.}
 #' \item{\code{MBBnull}}{Simulated null distribution from MBB.}
 #' \item{\code{statSeries}}{Time-ordered series of statistics.}
 #' \item{\code{angles}}{Time-ordered cosine similarities between reservoir states and conceptor space.}
@@ -90,11 +90,11 @@ ccp <- function(data, washoutL_plus_trainL = "", trainL = "", washoutL = "", tol
   binput <- replicate(nboots, bootdata(data, CRNNFit$params$washoutL, CRNNFit$params$trainL, MBBblockL))
   MBBnull <- CRNNBootstrap(binput, CRNNFit$output$W, CRNNFit$output$C, 0, CRNNFit$params$washoutL,
                            CRNNFit$params$trainL, CRNNFit$params$bscale, CRNNFit$params$iscale)
-  MBBsig <- sum(statistic <= MBBnull) / nboots
+  MBBquant <- sum(statistic <= MBBnull) / nboots
 
   output <- list("estimate" = estimate,
                  "statistic" = statistic,
-                 "MBBsig" = MBBsig,
+                 "MBBquant" = MBBquant,
                  "MBBnull" = MBBnull,
                  "statSeries" = KSseries,
                  "angles" = CRNNFit$output$angles,
