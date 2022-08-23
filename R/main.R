@@ -86,7 +86,7 @@ ccp <- function(data, washoutL_plus_trainL = "", trainL = "", washoutL = "", tol
   statistic <- max(KSseries)
   estimate <- which.max(KSseries) + CRNNFit$params$washoutL + CRNNFit$params$trainL
 
-  MBBblockL <- ceiling(L^(1/3))
+  MBBblockL <- washoutL
   binput <- replicate(nboots, bootdata(data, CRNNFit$params$washoutL, CRNNFit$params$trainL, MBBblockL))
   MBBnull <- CRNNBootstrap(binput, CRNNFit$output$W, CRNNFit$output$C, 0, CRNNFit$params$washoutL,
                            CRNNFit$params$trainL, CRNNFit$params$bscale, CRNNFit$params$iscale)
