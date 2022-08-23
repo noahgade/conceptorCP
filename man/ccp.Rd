@@ -34,7 +34,7 @@ List of output:
 \describe{
 \item{\code{estimate}}{Estimated change point location.}
 \item{\code{statistic}}{Statistic from method.}
-\item{\code{MBBsig}}{Significance estimate from MBB.}
+\item{\code{MBBquant}}{Estimated quantile of statistic from MBB.}
 \item{\code{MBBnull}}{Simulated null distribution from MBB.}
 \item{\code{statSeries}}{Time-ordered series of statistics.}
 \item{\code{angles}}{Time-ordered cosine similarities between reservoir states and conceptor space.}
