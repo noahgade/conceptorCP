@@ -180,7 +180,7 @@ chooseMBBblockL <- function(data, CRNNFit) {
     }
   }
 
-  base_input <- array(bootdata(data, CRNNFit$params$washoutL, CRNNFit$params$trainL, Lstar), dim = c(L, ncol(data), 1))
+  base_input <- replicate(M, bootdata(data, CRNNFit$params$washoutL, CRNNFit$params$trainL, Lstar))
 
   MBBests <- CRNNBootstrap(split_input, CRNNFit$output$W, CRNNFit$output$C, 0, CRNNFit$params$washoutL,
                              CRNNFit$params$trainL, CRNNFit$params$bscale, CRNNFit$params$iscale)
@@ -188,7 +188,7 @@ chooseMBBblockL <- function(data, CRNNFit) {
   MBBbase <- CRNNBootstrap(base_input, CRNNFit$output$W, CRNNFit$output$C, 0, CRNNFit$params$washoutL,
                              CRNNFit$params$trainL, CRNNFit$params$bscale, CRNNFit$params$iscale)
 
-  Lstar <- ceiling((L / (L - M + 1))^(1/3) * Lb[which.min(colSums(matrix((MBBests - as.numeric(MBBbase))^2, nrow = M)))])
+  Lstar <- ceiling((L / (L - M + 1))^(1/3) * Lb[which.min(colSums(matrix((MBBests - mean(MBBbase))^2, nrow = M)))])
   return(Lstar)
 }
 
