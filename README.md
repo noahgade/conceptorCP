@@ -9,6 +9,7 @@
 Package includes one example VAR1 data set, `test_data`. Description of its generation is included in the documentation files.
 
 ## References
+HHJ (1995)
 
 ## Installation
 
