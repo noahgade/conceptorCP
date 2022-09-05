@@ -157,6 +157,41 @@ bootdata <- function(data, washoutL, trainL, blockL) {
   return(bootinput)
 }
 
+#' Title
+#'
+#' @param data A T\code{x}d data set with columns as variables.
+#' @param CRNNFit Output from fitCRNN function.
+#'
+#' @return Estimated optimal block length for MBB per Hall, Horowitz, and Jung (1995).
+chooseMBBblockL <- function(data, CRNNFit) {
+  Lstar <- CRNNFit$params$washoutL
+
+  M <- 40
+  B <- 5
+  L <- nrow(data)
+  Lb <- ceiling(seq(L^(1/5), L^(1/2), length.out = B))
+  split_input <- array(dim = c(L - M + 1, ncol(data), M*B))
+  for(b in 1:B){
+    for(m in 1:M){
+      split_input[,,(b-1)*M + m] <- bootdata(rbind(data[1:(CRNNFit$params$washoutL + CRNNFit$params$trainL),],
+                                              data[(CRNNFit$params$washoutL + CRNNFit$params$trainL + m):(L - M + m),]),
+                                            CRNNFit$params$washoutL, CRNNFit$params$trainL, Lb[b])
+    }
+  }
+
+  base_input <- array(bootdata(data, CRNNFit$params$washoutL, CRNNFit$params$trainL, Lstar), dim = c(L, ncol(data), 1))
+
+  MBBests <- CRNNBootstrap(split_input, CRNNFit$output$W, CRNNFit$output$C, 0, CRNNFit$params$washoutL,
+                             CRNNFit$params$trainL, CRNNFit$params$bscale, CRNNFit$params$iscale)
+
+  MBBbase <- CRNNBootstrap(base_input, CRNNFit$output$W, CRNNFit$output$C, 0, CRNNFit$params$washoutL,
+                             CRNNFit$params$trainL, CRNNFit$params$bscale, CRNNFit$params$iscale)
+
+  Lstar <- ceiling((L / (L - M + 1))^(1/3) * Lb[which.min(colSums(matrix((MBBests - as.numeric(MBBbase))^2, nrow = M)))])
+  return(Lstar)
+}
+
+
 #' Adjust ggplot legend
 #'
 #' @param data Data series to plot.

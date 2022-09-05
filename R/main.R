@@ -10,6 +10,7 @@
 #' @param washoutL Number of time points used for reservoir washout.
 #' @param tol Error tolerance for conceptor fit to the data.
 #' @param nboots Number of bootstraps to estimate statistic null distribution.
+#' @param MBBblockL Block length for moving block bootstrap.
 #' @param plot.it Indicator to toggle export of plot.
 #'
 #' @return List of output:
@@ -18,6 +19,7 @@
 #' \item{\code{statistic}}{Statistic from method.}
 #' \item{\code{MBBquant}}{Estimated quantile of statistic from MBB.}
 #' \item{\code{MBBnull}}{Simulated null distribution from MBB.}
+#' \item{\code{MBBblockL}}{Block length used for the MBB.}
 #' \item{\code{statSeries}}{Time-ordered series of statistics.}
 #' \item{\code{angles}}{Time-ordered cosine similarities between reservoir states and conceptor space.}
 #' \item{\code{netParams}}{List of RNN parameters:}
@@ -44,7 +46,7 @@
 #' ccp(test_data, trainL = 100)
 #' ccp(test_data, trainL = 100, tol = 0.08, nboots = 500)
 #' }
-ccp <- function(data, washoutL_plus_trainL = "", trainL = "", washoutL = "", tol = 0.04, nboots = 200, plot.it = TRUE) {
+ccp <- function(data, washoutL_plus_trainL = "", trainL = "", washoutL = "", tol = 0.04, nboots = 200, MBBblockL = NULL, plot.it = TRUE) {
 
   if(check_integer(washoutL_plus_trainL) == FALSE & check_integer(trainL) == FALSE) {
     stop("Please specify a number of time points for conceptor training. Specify one of the following parameters: washoutL_plus_trainL, trainL")
@@ -80,13 +82,22 @@ ccp <- function(data, washoutL_plus_trainL = "", trainL = "", washoutL = "", tol
     stop("Please specify plot.it to include or suppress plot output.")
   }
 
+  if(!is.null(MBBblockL)) {
+    if(!check_integer(MBBblockL) | MBBblockL >= nrow(data)) {
+      stop("Please specify a valid block length for the MBB.")
+    }
+  }
+
+
   L <- nrow(data)
   CRNNFit <- fitCRNN(data, washoutL_plus_trainL, trainL, washoutL, tol)
   KSseries <- KSstatCalc(CRNNFit$output$angles[(CRNNFit$params$washoutL + CRNNFit$params$trainL + 1):L])
   statistic <- max(KSseries)
   estimate <- which.max(KSseries) + CRNNFit$params$washoutL + CRNNFit$params$trainL
 
-  MBBblockL <- washoutL
+  if(is.null(MBBblockL)) {
+    MBBblockL <- chooseMBBblockL(data, CRNNFit)
+  }
   binput <- replicate(nboots, bootdata(data, CRNNFit$params$washoutL, CRNNFit$params$trainL, MBBblockL))
   MBBnull <- CRNNBootstrap(binput, CRNNFit$output$W, CRNNFit$output$C, 0, CRNNFit$params$washoutL,
                            CRNNFit$params$trainL, CRNNFit$params$bscale, CRNNFit$params$iscale)
@@ -96,6 +107,7 @@ ccp <- function(data, washoutL_plus_trainL = "", trainL = "", washoutL = "", tol
                  "statistic" = statistic,
                  "MBBquant" = MBBquant,
                  "MBBnull" = MBBnull,
+                 "MBBblockL" = MBBblockL,
                  "statSeries" = KSseries,
                  "angles" = CRNNFit$output$angles,
                  "netParams" = append(CRNNFit$params, list(C = CRNNFit$output$C, W = CRNNFit$output$W, ResStates = CRNNFit$output$ResStates)))

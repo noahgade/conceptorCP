@@ -27,8 +27,20 @@ testthat::test_that("ccp Function", {
     ccp(test_data, trainL = 100, plot.it = 0)
   )
 
+  testthat::expect_error(
+    ccp(test_data, trainL = 100, MBBblockL = 0)
+  )
+
+  testthat::expect_error(
+    ccp(test_data, trainL = 100, MBBblockL = nrow(test_data) + 1)
+  )
+
   testthat::expect_silent(
   output <- ccp(test_data, trainL = 100, plot.it = FALSE)
+  )
+
+  testthat::expect_silent(
+    output <- ccp(test_data, trainL = 100, plot.it = FALSE, MBBblock = 20)
   )
 
   testthat::expect_type(
