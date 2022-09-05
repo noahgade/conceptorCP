@@ -10,7 +10,7 @@ ccp(
   trainL = "",
   washoutL = "",
   tol = 0.04,
-  nboots = 200,
+  nboots = 240,
   MBBblockL = NULL,
   plot.it = TRUE
 )
