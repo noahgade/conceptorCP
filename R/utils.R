@@ -157,12 +157,13 @@ bootdata <- function(data, washoutL, trainL, blockL) {
   return(bootinput)
 }
 
-#' Title
+#' Select optimal MBB block length
+#' @description Selects optimal MBB block length with the Hall, Horowitz, and Jing (1995) algorithm.
 #'
 #' @param data A T\code{x}d data set with columns as variables.
 #' @param CRNNFit Output from fitCRNN function.
 #'
-#' @return Estimated optimal block length for MBB per Hall, Horowitz, and Jung (1995).
+#' @return Estimated optimal block length for MBB per Hall, Horowitz, and Jing (1995).
 chooseMBBblockL <- function(data, CRNNFit) {
   Lstar <- CRNNFit$params$washoutL
 

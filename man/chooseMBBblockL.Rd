@@ -2,7 +2,7 @@
 % Please edit documentation in R/utils.R
 \name{chooseMBBblockL}
 \alias{chooseMBBblockL}
-\title{Title}
+\title{Select optimal MBB block length}
 \usage{
 chooseMBBblockL(data, CRNNFit)
 }
@@ -12,8 +12,8 @@ chooseMBBblockL(data, CRNNFit)
 \item{CRNNFit}{Output from fitCRNN function.}
 }
 \value{
-Estimated optimal block length for MBB per Hall, Horowitz, and Jung (1995).
+Estimated optimal block length for MBB per Hall, Horowitz, and Jing (1995).
 }
 \description{
-Title
+Selects optimal MBB block length with the Hall, Horowitz, and Jing (1995) algorithm.
 }
