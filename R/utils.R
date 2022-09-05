@@ -361,7 +361,7 @@ plotCP <- function(ccp_output, nbreaks = 10) {
                    panel.grid.minor = ggplot2::element_blank())
 
   plotS <- cowplot::axis_canvas(plotT, axis = "y", coord_flip = TRUE) +
-    ggplot2::geom_histogram(ggplot2::aes(x = ccp_output$MBBnull), binwidth = 0.5, color = "black", fill = rgb(1, 0, 0, 0.2)) +
+    ggplot2::geom_histogram(ggplot2::aes(x = ccp_output$MBBnull), binwidth = 0.3, color = "black", fill = rgb(1, 0, 0, 0.2)) +
     ggplot2::coord_flip()
   suppressWarnings({
     plot1 <- cowplot::insert_yaxis_grob(plotT, plotS, grid::unit(0.1, "null"), position = "right")
