@@ -9,7 +9,18 @@
 Package includes one example VAR1 data set, `test_data`. Description of its generation is included in the documentation files.
 
 ## References
-HHJ (1995)
+@article{HHJ1995,
+    author = {HALL, PETER and HOROWITZ, JOEL L. and JING, BING-YI},
+    title = "{On blocking rules for the bootstrap with dependent data}",
+    journal = {Biometrika},
+    volume = {82},
+    number = {3},
+    pages = {561-574},
+    year = {1995},
+    month = {09},
+    issn = {0006-3444},
+    doi = {10.1093/biomet/82.3.561}
+}
 
 ## Installation
 
