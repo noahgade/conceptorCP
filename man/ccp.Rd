@@ -11,9 +11,9 @@ ccp(
   washoutL = "",
   tol = 0.04,
   nboots = 240,
+  kappa = 0.01,
   MBBblockL = NULL,
-  plot.it = TRUE,
-  kappa = 0.01
+  plot.it = TRUE
 )
 }
 \arguments{
@@ -29,11 +29,11 @@ ccp(
 
 \item{nboots}{Number of bootstraps to estimate statistic null distribution.}
 
+\item{kappa}{Small constant that sets the change point domain (set as <= 0.01).}
+
 \item{MBBblockL}{Block length for moving block bootstrap.}
 
 \item{plot.it}{Indicator to toggle export of plot.}
-
-\item{kappa}{Small constant that sets the change point domain (set as <= 0.01).}
 }
 \value{
 List of output:
