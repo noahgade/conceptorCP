@@ -90,6 +90,11 @@ ccp <- function(data, washoutL_plus_trainL = "", trainL = "", washoutL = "", tol
     }
   }
 
+  if(kappa > 0.01) {
+    warning("Consider changing kappa to <= 0.01 for consistent change point estimation.")
+  } else if(kappa <= 0) {
+    stop("kappa must be a small constant > 0.")
+  }
 
   L <- nrow(data)
   CRNNFit <- fitCRNN(data, washoutL_plus_trainL, trainL, washoutL, tol)

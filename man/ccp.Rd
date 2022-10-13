@@ -12,7 +12,8 @@ ccp(
   tol = 0.04,
   nboots = 240,
   MBBblockL = NULL,
-  plot.it = TRUE
+  plot.it = TRUE,
+  kappa = 0.01
 )
 }
 \arguments{
@@ -31,6 +32,8 @@ ccp(
 \item{MBBblockL}{Block length for moving block bootstrap.}
 
 \item{plot.it}{Indicator to toggle export of plot.}
+
+\item{kappa}{Small constant that sets the change point domain (set as <= 0.01).}
 }
 \value{
 List of output:
@@ -42,6 +45,7 @@ List of output:
 \item{\code{MBBblockL}}{Block length used for the MBB.}
 \item{\code{statSeries}}{Time-ordered series of statistics.}
 \item{\code{angles}}{Time-ordered cosine similarities between reservoir states and conceptor space.}
+\item{\code{CLimits}}{Lower and upper limits of time points for a consistent estimate of the change point.}
 \item{\code{netParams}}{List of RNN parameters:}
 \itemize{
 \item{\code{rscale}} {Scale of reservoir matrix.}
@@ -62,7 +66,7 @@ List of output:
 Performs the conceptor change point algorithm to determine the location and significance of the most likely change point in a dependent, multivariate time series. Requires specification of a training length, or a combined washout and training length.
 }
 \details{
-Provides an estimate of the most likely change point location in a multivariate time series. Fits a series of conceptor matrices to a representative training window of data, and compares the evolution of the RNN reservoir states to the original computed conceptor spaces. Method assumes that the training window is at least wide-sense cyclostationary, or there is not a long run trend present. The training window should be representative in the sense that it captures a full range of dynamics of the system. Change points are identified from a Kolmogorov-Smirnov like statistic based on a univariate sequence of derived cosine similarity measures. Quantile estimates are obtained from a moving block bootstrap of the original data.
+Provides an estimate of the most likely change point location in a multivariate time series. Fits a series of conceptor matrices to a representative training window of data, and compares the evolution of the RNN reservoir states to the original computed conceptor spaces. Method assumes that the training window is at least wide-sense cyclostationary, or there is not a long run trend present. The training window should be representative in the sense that it captures a full range of dynamics of the system. Change points are identified from a CUSUM like statistic based on a univariate sequence of derived cosine similarity measures. Quantile estimates are obtained from a moving block bootstrap of the original data.
 }
 \examples{
 \donttest{

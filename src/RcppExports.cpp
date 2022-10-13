@@ -122,19 +122,20 @@ BEGIN_RCPP
 END_RCPP
 }
 // KSstatCalc
-arma::vec KSstatCalc(arma::vec angles);
-RcppExport SEXP _conceptorCP_KSstatCalc(SEXP anglesSEXP) {
+arma::vec KSstatCalc(arma::vec angles, float kappa);
+RcppExport SEXP _conceptorCP_KSstatCalc(SEXP anglesSEXP, SEXP kappaSEXP) {
 BEGIN_RCPP
     Rcpp::RObject rcpp_result_gen;
     Rcpp::RNGScope rcpp_rngScope_gen;
     Rcpp::traits::input_parameter< arma::vec >::type angles(anglesSEXP);
-    rcpp_result_gen = Rcpp::wrap(KSstatCalc(angles));
+    Rcpp::traits::input_parameter< float >::type kappa(kappaSEXP);
+    rcpp_result_gen = Rcpp::wrap(KSstatCalc(angles, kappa));
     return rcpp_result_gen;
 END_RCPP
 }
 // CRNNBootstrap
-arma::vec CRNNBootstrap(arma::cube bootinput, arma::cube W, arma::cube C, float RSInitial, int washoutL, int trainL, float bscale, float iscale);
-RcppExport SEXP _conceptorCP_CRNNBootstrap(SEXP bootinputSEXP, SEXP WSEXP, SEXP CSEXP, SEXP RSInitialSEXP, SEXP washoutLSEXP, SEXP trainLSEXP, SEXP bscaleSEXP, SEXP iscaleSEXP) {
+arma::vec CRNNBootstrap(arma::cube bootinput, arma::cube W, arma::cube C, float RSInitial, int washoutL, int trainL, float bscale, float iscale, float kappa);
+RcppExport SEXP _conceptorCP_CRNNBootstrap(SEXP bootinputSEXP, SEXP WSEXP, SEXP CSEXP, SEXP RSInitialSEXP, SEXP washoutLSEXP, SEXP trainLSEXP, SEXP bscaleSEXP, SEXP iscaleSEXP, SEXP kappaSEXP) {
 BEGIN_RCPP
     Rcpp::RObject rcpp_result_gen;
     Rcpp::RNGScope rcpp_rngScope_gen;
@@ -146,7 +147,8 @@ BEGIN_RCPP
     Rcpp::traits::input_parameter< int >::type trainL(trainLSEXP);
     Rcpp::traits::input_parameter< float >::type bscale(bscaleSEXP);
     Rcpp::traits::input_parameter< float >::type iscale(iscaleSEXP);
-    rcpp_result_gen = Rcpp::wrap(CRNNBootstrap(bootinput, W, C, RSInitial, washoutL, trainL, bscale, iscale));
+    Rcpp::traits::input_parameter< float >::type kappa(kappaSEXP);
+    rcpp_result_gen = Rcpp::wrap(CRNNBootstrap(bootinput, W, C, RSInitial, washoutL, trainL, bscale, iscale, kappa));
     return rcpp_result_gen;
 END_RCPP
 }
@@ -203,8 +205,8 @@ static const R_CallMethodDef CallEntries[] = {
     {"_conceptorCP_outputCalc", (DL_FUNC) &_conceptorCP_outputCalc, 2},
     {"_conceptorCP_RNNParamFit", (DL_FUNC) &_conceptorCP_RNNParamFit, 7},
     {"_conceptorCP_angleCalc", (DL_FUNC) &_conceptorCP_angleCalc, 2},
-    {"_conceptorCP_KSstatCalc", (DL_FUNC) &_conceptorCP_KSstatCalc, 1},
-    {"_conceptorCP_CRNNBootstrap", (DL_FUNC) &_conceptorCP_CRNNBootstrap, 8},
+    {"_conceptorCP_KSstatCalc", (DL_FUNC) &_conceptorCP_KSstatCalc, 2},
+    {"_conceptorCP_CRNNBootstrap", (DL_FUNC) &_conceptorCP_CRNNBootstrap, 9},
     {"_conceptorCP_rcpparma_hello_world", (DL_FUNC) &_conceptorCP_rcpparma_hello_world, 0},
     {"_conceptorCP_rcpparma_outerproduct", (DL_FUNC) &_conceptorCP_rcpparma_outerproduct, 1},
     {"_conceptorCP_rcpparma_innerproduct", (DL_FUNC) &_conceptorCP_rcpparma_innerproduct, 1},
