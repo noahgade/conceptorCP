@@ -162,9 +162,10 @@ bootdata <- function(data, washoutL, trainL, blockL) {
 #'
 #' @param data A T\code{x}d data set with columns as variables.
 #' @param CRNNFit Output from fitCRNN function.
+#' @param kappa Small constant that sets the change point domain (set as <= 0.01).
 #'
 #' @return Estimated optimal block length for MBB per Hall, Horowitz, and Jing (1995).
-chooseMBBblockL <- function(data, CRNNFit) {
+chooseMBBblockL <- function(data, CRNNFit, kappa) {
   Lstar <- CRNNFit$params$washoutL
 
   M <- 40
@@ -183,10 +184,10 @@ chooseMBBblockL <- function(data, CRNNFit) {
   base_input <- replicate(M, bootdata(data, CRNNFit$params$washoutL, CRNNFit$params$trainL, Lstar))
 
   MBBests <- CRNNBootstrap(split_input, CRNNFit$output$W, CRNNFit$output$C, 0, CRNNFit$params$washoutL,
-                             CRNNFit$params$trainL, CRNNFit$params$bscale, CRNNFit$params$iscale)
+                             CRNNFit$params$trainL, CRNNFit$params$bscale, CRNNFit$params$iscale, kappa)
 
   MBBbase <- CRNNBootstrap(base_input, CRNNFit$output$W, CRNNFit$output$C, 0, CRNNFit$params$washoutL,
-                             CRNNFit$params$trainL, CRNNFit$params$bscale, CRNNFit$params$iscale)
+                             CRNNFit$params$trainL, CRNNFit$params$bscale, CRNNFit$params$iscale, kappa)
 
   Lstar <- ceiling((L / (L - M + 1))^(1/3) * Lb[which.min(colSums(matrix((MBBests - mean(MBBbase))^2, nrow = M)))])
   return(Lstar)

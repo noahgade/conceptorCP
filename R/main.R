@@ -103,7 +103,7 @@ ccp <- function(data, washoutL_plus_trainL = "", trainL = "", washoutL = "", tol
   estimate <- which.max(KSseries) + CRNNFit$params$washoutL + CRNNFit$params$trainL
 
   if(is.null(MBBblockL)) {
-    MBBblockL <- chooseMBBblockL(data, CRNNFit)
+    MBBblockL <- chooseMBBblockL(data, CRNNFit, kappa)
   }
   binput <- replicate(nboots, bootdata(data, CRNNFit$params$washoutL, CRNNFit$params$trainL, MBBblockL))
   MBBnull <- CRNNBootstrap(binput, CRNNFit$output$W, CRNNFit$output$C, 0, CRNNFit$params$washoutL,
