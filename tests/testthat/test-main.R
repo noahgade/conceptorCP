@@ -36,20 +36,20 @@ testthat::test_that("ccp Function", {
   )
 
   testthat::expect_silent(
-  output <- ccp(test_data, trainL = 100, plot.it = FALSE)
+    ccp(test_data, trainL = 100, plot.it = FALSE, MBBblock = 20)
   )
 
   testthat::expect_silent(
-    output <- ccp(test_data, trainL = 100, plot.it = FALSE, MBBblock = 20)
+    ccp(test_data, washoutL_plus_trainL = 150, plot.it = FALSE)
+  )
+
+  testthat::expect_silent(
+    output <- ccp(test_data, trainL = 100, plot.it = FALSE)
   )
 
   testthat::expect_type(
     output,
     "list"
-  )
-
-  testthat::expect_silent(
-    ccp(test_data, washoutL_plus_trainL = 150, plot.it = FALSE)
   )
 
   p <- plotCP(output)
@@ -71,6 +71,14 @@ testthat::test_that("ccp Function", {
 
   testthat::expect_true(
     output$netParams$error < 0.04
+  )
+
+  testthat::expect_true(
+    min(output$MBBnull) >= 0 & max(output$MBBnull) <= 0.5
+  )
+
+  testthat::expect_true(
+    output$statistic >= 0 & output$statistic <= 0.5
   )
 }
 )

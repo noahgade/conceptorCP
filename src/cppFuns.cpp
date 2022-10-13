@@ -154,7 +154,7 @@ arma::mat angleCalc(arma::cube RS, arma::cube CRS) {
 }
 
 // [[Rcpp::export]]
-arma::vec KSstatCalc(arma::vec angles) {
+arma::vec KSstatCalc(arma::vec angles, float kappa) {
   float timepts = angles.n_elem;
   arma::vec timevector = arma::linspace(1, timepts, timepts);
   arma::uvec asort = arma::sort_index(angles) + 1;
@@ -179,8 +179,8 @@ arma::vec KSstatCalc(arma::vec angles) {
 
   arma::vec KSseries = arma::vec(timepts);
   for(int t1 = 0; t1 < timepts; t1++){
-    double coef1 = timevector(t1) * (timepts - timevector(t1)) / pow(timepts, 1.5);
-    arma::vec qscale = {pow(timevector(t1) / timepts, 0.5) * pow(1 - timevector(t1) / timepts, 0.5), 0.01};
+    double coef1 = timevector(t1) * (timepts - timevector(t1)) / pow(timepts, 2);
+    arma::vec qscale = {pow(timevector(t1) / timepts, 0.5) * pow(1 - timevector(t1) / timepts, 0.5), kappa};
     double coef2 = arma::max(qscale);
     KSseries(t1) = coef1 * cmaxes(t1) / coef2;
   }
@@ -189,7 +189,7 @@ arma::vec KSstatCalc(arma::vec angles) {
 }
 
 // [[Rcpp::export]]
-arma::vec CRNNBootstrap(arma::cube bootinput, arma::cube W, arma::cube C, float RSInitial, int washoutL, int trainL, float bscale, float iscale) {
+arma::vec CRNNBootstrap(arma::cube bootinput, arma::cube W, arma::cube C, float RSInitial, int washoutL, int trainL, float bscale, float iscale, float kappa) {
   float nboots = bootinput.n_slices;
   float L = bootinput.n_rows;
   arma::vec mbbKS = arma::vec(nboots);
@@ -199,7 +199,7 @@ arma::vec CRNNBootstrap(arma::cube bootinput, arma::cube W, arma::cube C, float 
     arma::mat Angles = angleCalc(crnn.slices(1, L), crnn.slices(L + 2, 2 * L + 1));
     arma::vec aAngles = arma::mean(Angles, 1);
     arma::vec anglesKS = aAngles.rows(washoutL + trainL, L-1);
-    arma::vec KS = KSstatCalc(anglesKS);
+    arma::vec KS = KSstatCalc(anglesKS, kappa);
     float maxKS = max(KS);
     mbbKS(i) = maxKS;
   }

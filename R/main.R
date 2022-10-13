@@ -2,7 +2,7 @@
 #'
 #' @description Performs the conceptor change point algorithm to determine the location and significance of the most likely change point in a dependent, multivariate time series. Requires specification of a training length, or a combined washout and training length.
 #'
-#' @details Provides an estimate of the most likely change point location in a multivariate time series. Fits a series of conceptor matrices to a representative training window of data, and compares the evolution of the RNN reservoir states to the original computed conceptor spaces. Method assumes that the training window is at least wide-sense cyclostationary, or there is not a long run trend present. The training window should be representative in the sense that it captures a full range of dynamics of the system. Change points are identified from a Kolmogorov-Smirnov like statistic based on a univariate sequence of derived cosine similarity measures. Quantile estimates are obtained from a moving block bootstrap of the original data.
+#' @details Provides an estimate of the most likely change point location in a multivariate time series. Fits a series of conceptor matrices to a representative training window of data, and compares the evolution of the RNN reservoir states to the original computed conceptor spaces. Method assumes that the training window is at least wide-sense cyclostationary, or there is not a long run trend present. The training window should be representative in the sense that it captures a full range of dynamics of the system. Change points are identified from a CUSUM like statistic based on a univariate sequence of derived cosine similarity measures. Quantile estimates are obtained from a moving block bootstrap of the original data.
 #'
 #' @param data A T\code{x}d data set with variables as columns.
 #' @param washoutL_plus_trainL Number of time points used for both reservoir washout and conceptor training.
@@ -12,6 +12,7 @@
 #' @param nboots Number of bootstraps to estimate statistic null distribution.
 #' @param MBBblockL Block length for moving block bootstrap.
 #' @param plot.it Indicator to toggle export of plot.
+#' @param kappa Small constant that sets the change point domain (set as <= 0.01).
 #'
 #' @return List of output:
 #' \describe{
@@ -22,6 +23,7 @@
 #' \item{\code{MBBblockL}}{Block length used for the MBB.}
 #' \item{\code{statSeries}}{Time-ordered series of statistics.}
 #' \item{\code{angles}}{Time-ordered cosine similarities between reservoir states and conceptor space.}
+#' \item{\code{CLimits}}{Lower and upper limits of time points for a consistent estimate of the change point.}
 #' \item{\code{netParams}}{List of RNN parameters:}
 #' \itemize{
 #' \item{\code{rscale}} {Scale of reservoir matrix.}
@@ -46,7 +48,7 @@
 #' ccp(test_data, trainL = 100)
 #' ccp(test_data, trainL = 100, tol = 0.08, nboots = 500)
 #' }
-ccp <- function(data, washoutL_plus_trainL = "", trainL = "", washoutL = "", tol = 0.04, nboots = 240, MBBblockL = NULL, plot.it = TRUE) {
+ccp <- function(data, washoutL_plus_trainL = "", trainL = "", washoutL = "", tol = 0.04, nboots = 240, MBBblockL = NULL, plot.it = TRUE, kappa = 0.01) {
 
   if(check_integer(washoutL_plus_trainL) == FALSE & check_integer(trainL) == FALSE) {
     stop("Please specify a number of time points for conceptor training. Specify one of the following parameters: washoutL_plus_trainL, trainL")
@@ -91,7 +93,7 @@ ccp <- function(data, washoutL_plus_trainL = "", trainL = "", washoutL = "", tol
 
   L <- nrow(data)
   CRNNFit <- fitCRNN(data, washoutL_plus_trainL, trainL, washoutL, tol)
-  KSseries <- KSstatCalc(CRNNFit$output$angles[(CRNNFit$params$washoutL + CRNNFit$params$trainL + 1):L])
+  KSseries <- KSstatCalc(CRNNFit$output$angles[(CRNNFit$params$washoutL + CRNNFit$params$trainL + 1):L], kappa)
   statistic <- max(KSseries)
   estimate <- which.max(KSseries) + CRNNFit$params$washoutL + CRNNFit$params$trainL
 
@@ -100,8 +102,10 @@ ccp <- function(data, washoutL_plus_trainL = "", trainL = "", washoutL = "", tol
   }
   binput <- replicate(nboots, bootdata(data, CRNNFit$params$washoutL, CRNNFit$params$trainL, MBBblockL))
   MBBnull <- CRNNBootstrap(binput, CRNNFit$output$W, CRNNFit$output$C, 0, CRNNFit$params$washoutL,
-                           CRNNFit$params$trainL, CRNNFit$params$bscale, CRNNFit$params$iscale)
+                           CRNNFit$params$trainL, CRNNFit$params$bscale, CRNNFit$params$iscale, kappa)
   MBBquant <- sum(statistic <= MBBnull) / nboots
+
+  CLimits <- CRNNFit$params$washoutL + CRNNFit$params$trainL + (L - CRNNFit$params$washoutL - CRNNFit$params$trainL)*(0.5 + c(-0.5*sqrt(1 - 4*kappa^2), 0.5*sqrt(1 - 4*kappa^2)))
 
   output <- list("estimate" = estimate,
                  "statistic" = statistic,
@@ -110,6 +114,7 @@ ccp <- function(data, washoutL_plus_trainL = "", trainL = "", washoutL = "", tol
                  "MBBblockL" = MBBblockL,
                  "statSeries" = KSseries,
                  "angles" = CRNNFit$output$angles,
+                 "CLimits" = CLimits,
                  "netParams" = append(CRNNFit$params, list(C = CRNNFit$output$C, W = CRNNFit$output$W, ResStates = CRNNFit$output$ResStates)))
 
   if(plot.it == TRUE) {
