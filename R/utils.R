@@ -336,7 +336,7 @@ plotCP <- function(ccp_output, nbreaks = 10) {
                    axis.ticks.x = ggplot2::element_blank())
 
   SSeries <- dplyr::tibble(Time = seq(ccp_output$netParams$washoutL + ccp_output$netParams$trainL + 1, L), Stat = ccp_output$statSeries)
-  upper.limit <- max(SSeries$Stat, stats::quantile(ccp_output$MBBnull, 0.99)[[1]]) + 0.25
+  upper.limit <- max(SSeries$Stat, stats::quantile(ccp_output$MBBnull, 0.99)[[1]]) + 0.02
 
   plotT <- ggplot2::ggplot(SSeries) +
     ggplot2::geom_line(ggplot2::aes_string(x = "Time", y = "Stat")) +
@@ -362,7 +362,7 @@ plotCP <- function(ccp_output, nbreaks = 10) {
                    panel.grid.minor = ggplot2::element_blank())
 
   plotS <- cowplot::axis_canvas(plotT, axis = "y", coord_flip = TRUE) +
-    ggplot2::geom_histogram(ggplot2::aes(x = ccp_output$MBBnull), bins = 10, color = "black", fill = rgb(1, 0, 0, 0.2)) +
+    ggplot2::geom_histogram(ggplot2::aes(x = ccp_output$MBBnull), bins = 20, color = "black", fill = rgb(1, 0, 0, 0.2)) +
     ggplot2::coord_flip()
   suppressWarnings({
     plot1 <- cowplot::insert_yaxis_grob(plotT, plotS, grid::unit(0.1, "null"), position = "right")
