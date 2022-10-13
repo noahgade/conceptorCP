@@ -4,12 +4,14 @@
 \alias{chooseMBBblockL}
 \title{Select optimal MBB block length}
 \usage{
-chooseMBBblockL(data, CRNNFit)
+chooseMBBblockL(data, CRNNFit, kappa)
 }
 \arguments{
 \item{data}{A T\code{x}d data set with columns as variables.}
 
 \item{CRNNFit}{Output from fitCRNN function.}
+
+\item{kappa}{Small constant that sets the change point domain (set as <= 0.01).}
 }
 \value{
 Estimated optimal block length for MBB per Hall, Horowitz, and Jing (1995).
