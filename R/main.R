@@ -112,6 +112,10 @@ ccp <- function(data, washoutL_plus_trainL = "", trainL = "", washoutL = "", tol
 
   CLimits <- CRNNFit$params$washoutL + CRNNFit$params$trainL + (L - CRNNFit$params$washoutL - CRNNFit$params$trainL)*(0.5 + c(-0.5*sqrt(1 - 4*kappa^2), 0.5*sqrt(1 - 4*kappa^2)))
 
+  if(!dplyr::between(estimate, CLimits[1], CLimits[2])) {
+    warning("Consider lowering kappa, CP estimate may not be a consistent estimate.")
+  }
+
   output <- list("estimate" = estimate,
                  "statistic" = statistic,
                  "MBBquant" = MBBquant,
