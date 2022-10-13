@@ -48,7 +48,7 @@
 #' ccp(test_data, trainL = 100)
 #' ccp(test_data, trainL = 100, tol = 0.08, nboots = 500)
 #' }
-ccp <- function(data, washoutL_plus_trainL = "", trainL = "", washoutL = "", tol = 0.04, nboots = 240, MBBblockL = NULL, plot.it = TRUE, kappa = 0.01) {
+ccp <- function(data, washoutL_plus_trainL = "", trainL = "", washoutL = "", tol = 0.04, nboots = 240, kappa = 0.01, MBBblockL = NULL, plot.it = TRUE) {
 
   if(check_integer(washoutL_plus_trainL) == FALSE & check_integer(trainL) == FALSE) {
     stop("Please specify a number of time points for conceptor training. Specify one of the following parameters: washoutL_plus_trainL, trainL")
