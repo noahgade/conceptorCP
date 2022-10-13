@@ -35,6 +35,14 @@ testthat::test_that("ccp Function", {
     ccp(test_data, trainL = 100, MBBblockL = nrow(test_data) + 1)
   )
 
+  testthat::expect_error(
+    ccp(test_data, trainL = 100, kappa = 0, plot.it = FALSE)
+  )
+
+  testthat::expect_warning(
+    ccp(test_data, trainL = 100, kappa = 0.2, plot.it = FALSE)
+  )
+
   testthat::expect_silent(
     ccp(test_data, trainL = 100, plot.it = FALSE, MBBblock = 20)
   )
