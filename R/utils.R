@@ -270,13 +270,13 @@ plotCP <- function(ccp_output, nbreaks = 10) {
   PWAngles$Values <- paste("Value", unlist(sapply(diff(EndPts), seq, simplify = F)))
 
   plotM <- ggplot2::ggplot(PWAngles, ggplot2::aes_string(x = "Time", y = "Angles")) +
-    ggplot2::geom_segment(data = PWAngles, ggplot2::aes_string(x = "Time" - 0.5, xend = "Time" + 0.5, y = "AngleMin", yend = 1, color = "PWRanks")) +
+    ggplot2::geom_segment(data = PWAngles, ggplot2::aes(x = Time - 0.5, xend = Time + 0.5, y = AngleMin, yend = 1, color = PWRanks)) +
     ggplot2::scale_color_gradientn(name = "",
                                    colors = c(rgb(1, 0, 0), rgb(1, 1, 1, 0), rgb(0, 0, 1)),
                                    limits = c(0, 1), na.value = "white",
                                    breaks = c(0, 0.5, 1),
                                    labels = c("Away from \nConceptor \nSpace", "\nMiddle: Percentiles of Cosine Similarities \n\nBottom: Relative ECDF Difference", "Towards \nConceptor \nSpace")) +
-    ggplot2::geom_point(ggplot2::aes_string(x = "Time", y = "Angles"), shape = 20, size = 1) +
+    ggplot2::geom_point(ggplot2::aes(x = Time, y = Angles), shape = 20, size = 1) +
     ggplot2::theme_bw() +
     ggplot2::scale_x_continuous(name = "Time",
                                 expand = c(0, 0),
@@ -307,13 +307,13 @@ plotCP <- function(ccp_output, nbreaks = 10) {
   CDF$WCDF <- dplyr::rowwise(WCDF) %>% dplyr::transmute(WCDF = sum(dplyr::c_across(cols = dplyr::everything())))
   CDF <- dplyr::mutate(CDF, WCDF = WCDF$WCDF / WindowLength, Shading = RCDF - WCDF)
 
-  plotB <- ggplot2::ggplot(data = CDF, ggplot2::aes_string(x = "RCDF", y = "WCDF")) +
-    ggplot2::geom_segment(ggplot2::aes_string(x = "RCDF", xend = "RCDF", y = 0, yend = 1, color = "Shading")) +
+  plotB <- ggplot2::ggplot(data = CDF, ggplot2::aes(x = RCDF, y = WCDF)) +
+    ggplot2::geom_segment(ggplot2::aes(x = RCDF, xend = RCDF, y = 0, yend = 1, color = Shading)) +
     ggplot2::scale_color_gradientn(name = "",
                                    colors = c(rgb(1, 0, 0), rgb(1, 1, 1, 0.5), rgb(0, 0, 1)),
                                    limits = c(-1, 1), na.value = "white") +
     ggplot2::facet_wrap(. ~ Window, nrow = 1) +
-    ggplot2::geom_point(data = CDF, ggplot2::aes_string(x = "RCDF", y = "WCDF"), col = "black", shape = 20, size = 0.2) +
+    ggplot2::geom_point(data = CDF, ggplot2::aes(x = RCDF, y = WCDF), col = "black", shape = 20, size = 0.2) +
     ggplot2::scale_x_continuous(name = "ECDF (Full Time Series)", limits = c(0, 1), expand = c(0, 0)) +
     ggplot2::scale_y_continuous(name = "ECDF (Time Window)", limits = c(0, 1), expand = c(0, 0)) +
     ggplot2::theme(strip.text.x = ggplot2::element_blank(),
@@ -339,7 +339,7 @@ plotCP <- function(ccp_output, nbreaks = 10) {
   upper.limit <- max(SSeries$Stat, stats::quantile(ccp_output$MBBnull, 0.99)[[1]]) + 0.02
 
   plotT <- ggplot2::ggplot(SSeries) +
-    ggplot2::geom_line(ggplot2::aes_string(x = "Time", y = "Stat")) +
+    ggplot2::geom_line(ggplot2::aes(x = Time, y = Stat)) +
     ggplot2::geom_hline(ggplot2::aes(yintercept = stats::quantile(ccp_output$MBBnull, 0.90)[[1]], linetype = "Upper 10% \nMBB Null Dist."), color = "red", key_glyph = "cust") +
     ggplot2::geom_hline(ggplot2::aes(yintercept = stats::quantile(ccp_output$MBBnull, 0.95)[[1]], linetype = "Upper 5% \nMBB Null Dist."), color = "red", key_glyph = "cust") +
     ggplot2::geom_hline(ggplot2::aes(yintercept = stats::quantile(ccp_output$MBBnull, 0.99)[[1]], linetype = "Upper 1% \nMBB Null Dist."), color = "red", key_glyph = "cust") +
