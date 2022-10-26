@@ -270,7 +270,7 @@ plotCP <- function(ccp_output, nbreaks = 10) {
   PWAngles$Values <- paste("Value", unlist(sapply(diff(EndPts), seq, simplify = F)))
 
   plotM <- ggplot2::ggplot(PWAngles, ggplot2::aes_string(x = "Time", y = "Angles")) +
-    ggplot2::geom_segment(data = PWAngles, ggplot2::aes_string(x = "Time", xend = "Time", y = "AngleMin", yend = 1, color = "PWRanks")) +
+    ggplot2::geom_segment(data = PWAngles, ggplot2::aes_string(x = "Time" - 0.5, xend = "Time" + 0.5, y = "AngleMin", yend = 1, color = "PWRanks")) +
     ggplot2::scale_color_gradientn(name = "",
                                    colors = c(rgb(1, 0, 0), rgb(1, 1, 1, 0), rgb(0, 0, 1)),
                                    limits = c(0, 1), na.value = "white",
@@ -349,7 +349,7 @@ plotCP <- function(ccp_output, nbreaks = 10) {
     ggplot2::scale_x_continuous(name = "Time", limits = c(ccp_output$netParams$washoutL + ccp_output$netParams$trainL + 1, L),
                                 expand = c(0, 0), EndPts + c(rep(1, nbreaks), 0)) +
     ggplot2::scale_y_continuous(name = "Statistic", limits = c(0, upper.limit), labels = label_number(accuracy = 0.1),
-                                expand = c(0, 0)) + ggplot2::theme_bw() +
+                                expand = c(0, 0), breaks = seq(0, upper.limit, 0.1)) + ggplot2::theme_bw() +
     ggplot2::theme(axis.text.y = ggplot2::element_text(size = 10),
                    legend.position = "top",
                    legend.justification = "right",
