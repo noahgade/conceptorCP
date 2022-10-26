@@ -270,7 +270,7 @@ plotCP <- function(ccp_output, nbreaks = 10) {
   PWAngles$Values <- paste("Value", unlist(sapply(diff(EndPts), seq, simplify = F)))
 
   plotM <- ggplot2::ggplot(PWAngles, ggplot2::aes_string(x = "Time", y = "Angles")) +
-    ggplot2::geom_rect(data = PWAngles, ggplot2::aes(xmin = Time - 0.5, xmax = Time + 0.5, ymin = AngleMin, ymax = 1, color = PWRanks)) +
+    ggplot2::geom_rect(data = PWAngles, ggplot2::aes(xmin = Time - 0.5, xmax = Time + 0.5, ymin = AngleMin, ymax = 1, fill = PWRanks)) +
     ggplot2::scale_color_gradientn(name = "",
                                    colors = c(rgb(1, 0, 0), rgb(1, 1, 1, 0), rgb(0, 0, 1)),
                                    limits = c(0, 1), na.value = "white",
