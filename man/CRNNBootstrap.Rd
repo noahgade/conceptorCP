@@ -33,7 +33,7 @@ CRNNBootstrap(
 
 \item{iscale}{input matrix scaling}
 
-\item{kappa}{}
+\item{kappa}{small constant > 0}
 }
 \value{
 bootstrap null distribution of CUSUM-like statistics
