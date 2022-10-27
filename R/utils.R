@@ -310,7 +310,7 @@ plotCP <- function(ccp_output, nbreaks = 10) {
   plotB <- ggplot2::ggplot(data = CDF, ggplot2::aes_string(x = "RCDF", y = "WCDF")) +
     ggplot2::geom_rect(ggplot2::aes_string(xmin = "RCDFmin", xmax = "RCDFmax", ymin = 0, ymax = 1, color = "Shading")) +
     ggplot2::scale_color_gradientn(name = "",
-                                   colors = c(rgb(1, 0, 0), rgb(1, 1, 1, 0.5), rgb(0, 0, 1)),
+                                   colors = c(rgb(1, 0, 0), rgb(1, 1, 1, 0), rgb(0, 0, 1)),
                                    limits = c(-1, 1), na.value = "white") +
     ggplot2::facet_wrap(. ~ Window, nrow = 1) +
     ggplot2::geom_point(data = CDF, ggplot2::aes_string(x = "RCDF", y = "WCDF"), col = "black", shape = 20, size = 0.2) +
