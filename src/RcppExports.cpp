@@ -153,8 +153,6 @@ BEGIN_RCPP
 END_RCPP
 }
 
-
-
 static const R_CallMethodDef CallEntries[] = {
     {"_conceptorCP_NRMSE", (DL_FUNC) &_conceptorCP_NRMSE, 2},
     {"_conceptorCP_runRNN", (DL_FUNC) &_conceptorCP_runRNN, 5},
