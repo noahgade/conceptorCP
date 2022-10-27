@@ -300,15 +300,15 @@ plotCP <- function(ccp_output, nbreaks = 10) {
                    panel.grid.major = ggplot2::element_blank(),
                    panel.grid.minor = ggplot2::element_blank())
 
-  CDF <- dplyr::tibble(Reference = rep(sort(PWAngles$Angles), nbreaks), RCDF = rep(seq(nrow(PWAngles)) / nrow(PWAngles), nbreaks), RCDFmin = RCDF - 1 / nrow(PWAngles), RCDFmax = RCDF, Window = rep(seq(1, nbreaks), each = nrow(PWAngles)), WindowLength = rep(diff(EndPts), each = nrow(PWAngles)))
+  CDF <- dplyr::tibble(Reference = rep(sort(PWAngles$Angles), nbreaks), RCDF = rep(seq(nrow(PWAngles)) / nrow(PWAngles), nbreaks), RCDFmin = RCDF - 1 / nrow(PWAngles), Window = rep(seq(1, nbreaks), each = nrow(PWAngles)), WindowLength = rep(diff(EndPts), each = nrow(PWAngles)))
   WCDF <- dplyr::select(PWAngles, Angles, Window, Values) %>% tidyr::pivot_wider(names_from = Values, values_from = Angles)
   WCDF <- dplyr::left_join(CDF, WCDF, by = "Window")
-  WCDF <- dplyr::transmute(WCDF, dplyr::across(7:(max(diff(EndPts) + 6)), function(X) X <= Reference))
-  CDF$WCDF <- dplyr::rowwise(WCDF) %>% dplyr::transmute(WCDF = sum(dplyr::c_across(cols = dplyr::everything())))
+  WCDF <- dplyr::transmute(WCDF, dplyr::across(6:(max(diff(EndPts) + 5)), function(X) X <= Reference))
+  CDF$WCDF <- dplyr::rowwise(WCDF) %>% dplyr::transmute(WCDF = sum(dplyr::c_across(cols = dplyr::everything()), na.rm = T))
   CDF <- dplyr::mutate(CDF, WCDF = WCDF$WCDF / WindowLength, Shading = RCDF - WCDF)
 
   plotB <- ggplot2::ggplot(data = CDF) +
-    ggplot2::geom_rect(ggplot2::aes_string(xmin = "RCDFmin", xmax = "RCDFmax", ymin = 0, ymax = 1, fill = "Shading")) +
+    ggplot2::geom_rect(ggplot2::aes_string(xmin = "RCDFmin", xmax = "RCDF", ymin = 0, ymax = 1, fill = "Shading")) +
     ggplot2::scale_fill_gradient2(name = "",
                                   low = "red",  mid = "white", high = "blue",
                                   limits = c(-1, 1), na.value = "white", midpoint = 0) +
