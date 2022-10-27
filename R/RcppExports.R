@@ -115,7 +115,7 @@ KSstatCalc <- function(angles, kappa) {
 #' @param trainL length of conceptor training
 #' @param bscale bias matrix scaling
 #' @param iscale input matrix scaling
-#' @param kappa
+#' @param kappa small constant > 0
 #'
 #' @return bootstrap null distribution of CUSUM-like statistics
 CRNNBootstrap <- function(bootinput, W, C, RSInitial, washoutL, trainL, bscale, iscale, kappa) {
