@@ -271,8 +271,8 @@ plotCP <- function(ccp_output, nbreaks = 10) {
 
   plotM <- ggplot2::ggplot(PWAngles, ggplot2::aes_string(x = "Time", y = "Angles")) +
     ggplot2::geom_rect(data = PWAngles, ggplot2::aes_string(xmin = "timeMin", xmax = "timeMax", ymin = "AngleMin", ymax = 1, fill = "PWRanks")) +
-    ggplot2::scale_fill_gradientn(name = "",
-                                   colors = c(rgb(1, 0, 0), rgb(1, 1, 1, 0), rgb(0, 0, 1)),
+    ggplot2::scale_fill_gradient2(name = "",
+                                   low = "red", mid = "white", high = "blue", midpoint = 0.5,
                                    limits = c(0, 1), na.value = "white",
                                    breaks = c(0, 0.5, 1),
                                    labels = c("Away from \nConceptor \nSpace", "\nMiddle: Percentiles of Cosine Similarities \n\nBottom: Relative ECDF Difference", "Towards \nConceptor \nSpace")) +
@@ -300,19 +300,19 @@ plotCP <- function(ccp_output, nbreaks = 10) {
                    panel.grid.major = ggplot2::element_blank(),
                    panel.grid.minor = ggplot2::element_blank())
 
-  CDF <- dplyr::tibble(Reference = rep(sort(PWAngles$Angles), nbreaks), RCDF = rep(seq(nrow(PWAngles)) / nrow(PWAngles), nbreaks), Window = rep(seq(1, nbreaks), each = nrow(PWAngles)), WindowLength = rep(diff(EndPts), each = nrow(PWAngles)), RCDFmin = RCDF - 0.5 / nrow(PWAngles), RCDFmax = RCDF + 0.5 / nrow(PWAngles))
+  CDF <- dplyr::tibble(Reference = rep(sort(PWAngles$Angles), nbreaks), RCDF = rep(seq(nrow(PWAngles)) / nrow(PWAngles), nbreaks), RCDFmin = RCDF - 1 / nrow(PWAngles), RCDFmax = RCDF, Window = rep(seq(1, nbreaks), each = nrow(PWAngles)), WindowLength = rep(diff(EndPts), each = nrow(PWAngles)))
   WCDF <- dplyr::select(PWAngles, Angles, Window, Values) %>% tidyr::pivot_wider(names_from = Values, values_from = Angles)
   WCDF <- dplyr::left_join(CDF, WCDF, by = "Window")
-  WCDF <- dplyr::transmute(WCDF, dplyr::across(5:max(diff(EndPts)), function(X) X <= Reference))
+  WCDF <- dplyr::transmute(WCDF, dplyr::across(7:(max(diff(EndPts) + 6)), function(X) X <= Reference))
   CDF$WCDF <- dplyr::rowwise(WCDF) %>% dplyr::transmute(WCDF = sum(dplyr::c_across(cols = dplyr::everything())))
   CDF <- dplyr::mutate(CDF, WCDF = WCDF$WCDF / WindowLength, Shading = RCDF - WCDF)
 
-  plotB <- ggplot2::ggplot(data = CDF, ggplot2::aes_string(x = "RCDF", y = "WCDF")) +
-    ggplot2::geom_rect(ggplot2::aes_string(xmin = "RCDFmin", xmax = "RCDFmax", ymin = 0, ymax = 1, color = "Shading")) +
-    ggplot2::scale_fill_gradientn(name = "",
-                                   colors = c(rgb(1, 0, 0), rgb(1, 1, 1, 0), rgb(0, 0, 1)),
-                                   limits = c(-1, 1), na.value = "white") +
-    ggplot2::facet_wrap(. ~ Window, nrow = 1) +
+  plotB <- ggplot2::ggplot(data = CDF) +
+    ggplot2::geom_rect(ggplot2::aes_string(xmin = "RCDFmin", xmax = "RCDFmax", ymin = 0, ymax = 1, fill = "Shading")) +
+    ggplot2::scale_fill_gradient2(name = "",
+                                  low = "red",  mid = "white", high = "blue",
+                                  limits = c(-1, 1), na.value = "white", midpoint = 0) +
+    ggplot2::facet_wrap(~Window, nrow = 1) +
     ggplot2::geom_point(data = CDF, ggplot2::aes_string(x = "RCDF", y = "WCDF"), col = "black", shape = 20, size = 0.2) +
     ggplot2::scale_x_continuous(name = "ECDF (Full Time Series)", limits = c(0, 1), expand = c(0, 0)) +
     ggplot2::scale_y_continuous(name = "ECDF (Time Window)", limits = c(0, 1), expand = c(0, 0)) +
