@@ -51,7 +51,7 @@ runCRNN <- function(input, W, C, RSInitial, washoutL, bscale, iscale) {
 
 #' Title Compute RNN output matrix
 #'
-#' @param input T\xode{x}d data
+#' @param input T\code{x}d data
 #' @param ResStates reservoir states from RNN
 #' @param regular Ridge regression regularization parameter
 #'

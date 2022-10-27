@@ -7,7 +7,7 @@
 WoutCalc(input, ResStates, regular)
 }
 \arguments{
-\item{input}{T\xode{x}d data}
+\item{input}{T\code{x}d data}
 
 \item{ResStates}{reservoir states from RNN}
 
