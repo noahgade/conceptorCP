@@ -41,3 +41,19 @@ CRNNBootstrap <- function(bootinput, W, C, RSInitial, washoutL, trainL, bscale, 
     .Call(`_conceptorCP_CRNNBootstrap`, bootinput, W, C, RSInitial, washoutL, trainL, bscale, iscale, kappa)
 }
 
+rcpparma_hello_world <- function() {
+    .Call(`_conceptorCP_rcpparma_hello_world`)
+}
+
+rcpparma_outerproduct <- function(x) {
+    .Call(`_conceptorCP_rcpparma_outerproduct`, x)
+}
+
+rcpparma_innerproduct <- function(x) {
+    .Call(`_conceptorCP_rcpparma_innerproduct`, x)
+}
+
+rcpparma_bothproducts <- function(x) {
+    .Call(`_conceptorCP_rcpparma_bothproducts`, x)
+}
+
